@@ -5,12 +5,9 @@ const cors = require('cors');
 const cookieSession = require('cookie-session');
 
 const app = express()
-//MiddleWar
+//MiddleWare
 
 require('./strategies/google');
-
-app.use(passport.initialize());
-app.use(passport.session());
 
 app.use(cors());
 
@@ -23,6 +20,21 @@ app.use(cookieSession({
 }
 ));
 
+//Auth Function
+const isLoggedIn = (req, res, next) => {
+    console.log(req.user);
+    if(req.user) {
+        next();
+    } else {
+        res.status(401).send({msg: "You Are Not Authorized. Go to /google to login!"});
+    }
+}
+
+//Initialization
+app.use(passport.initialize());
+app.use(passport.session());
+
+
 
 app.get("/", (req, res) => {
     res.send("Hey Hey");
@@ -30,20 +42,17 @@ app.get("/", (req, res) => {
 app.listen(3001 , () => {
     console.log(`app listening on port 3001`)
 })
-''
+
+app.get('/failed', isLoggedIn, (req, res) => res.send(`You failed to log in`));
+
+app.get('/dash', isLoggedIn, (req, res) => res.send(`Hello! ${req.user.displayName}`));
+
 app.get("/google", passport.authenticate('google', { scope: ['profile', 'email'] }));
 
 app.get('/google/callback', 
-  passport.authenticate('google', { failureRedirect: '/' }),
+  passport.authenticate('google', { failureRedirect: '/failed' }),
   function(req, res) {
-    res.redirect('/');
+    res.redirect('/dash');
   });
 
 
-  const isLoggedIn = (req, res, next) => {
-    if(req.user) {
-        next()
-    } else {
-        res.sendStatus(401);
-    }
-}

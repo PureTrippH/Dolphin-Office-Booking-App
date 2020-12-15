@@ -1,4 +1,4 @@
-import logo from '../logo.svg';
+import logo from '../CHC.png';
 import '../App.css';
 import Button from "../Components/Button" 
 import { useHistory } from "react-router-dom";
@@ -16,7 +16,7 @@ function Homepage() {
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
+        <img src={logo} className="" alt="logo" />
 
         <Button clickEvent={() => login()}> Login </Button>
       </header>
