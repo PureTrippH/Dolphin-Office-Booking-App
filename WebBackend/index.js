@@ -22,7 +22,6 @@ app.use(cookieSession({
 
 //Auth Function
 const isLoggedIn = (req, res, next) => {
-    console.log(req.user);
     if(req.user) {
         next();
     } else {
@@ -45,7 +44,7 @@ app.listen(3001 , () => {
 
 app.get('/failed', isLoggedIn, (req, res) => res.send(`You failed to log in`));
 
-app.get('/getUserInf', isLoggedIn, (req, res) => res.send(req.user));
+app.get('/userInf', isLoggedIn, (req, res) => res.send(req.user._json));
 
 app.get("/google", passport.authenticate('google', { scope: ['profile', 'email'] }));
 
