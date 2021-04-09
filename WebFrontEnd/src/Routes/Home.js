@@ -1,6 +1,6 @@
 import logo from '../CHC.png';
 import '../App.css';
-import Button from "../Components/Button" 
+import Button from '../Components/Button';
 import { useHistory } from "react-router-dom";
 
 

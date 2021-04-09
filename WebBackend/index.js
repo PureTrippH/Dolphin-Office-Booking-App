@@ -22,6 +22,7 @@ app.use(cookieSession({
 
 //Auth Function
 const isLoggedIn = (req, res, next) => {
+    console.log(`User inf ${req.user}`);
     if(req.user) {
         next();
     } else {
@@ -53,5 +54,3 @@ app.get('/google/callback',
   function(req, res) {
     res.redirect('http://localhost:3000/Dashboard');
   });
-
-
