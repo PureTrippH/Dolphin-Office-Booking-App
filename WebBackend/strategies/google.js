@@ -1,3 +1,6 @@
+//Imports
+const settings = require("../../settings.json");
+
 const { deserializeUser } = require('passport');
 const passport = require('passport');
 const GoogleStrat = require('passport-google-oauth20');
@@ -12,8 +15,8 @@ passport.deserializeUser((user, done) => {
 })
 
 passport.use(new myStrat({
-    clientID: "246325643664-4dcam77s8o9djtp260n1dgahhkaeq08j.apps.googleusercontent.com",
-    clientSecret: "LH6JqTGizWnfI-xl5bSD2mjL",
+    clientID: settings.client_ID,
+    clientSecret: settings.client_secret,
     callbackURL: "http://localhost:3001/google/callback"
 },
     (token, tokenSecret, profile, done) => {

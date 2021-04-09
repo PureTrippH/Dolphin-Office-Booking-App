@@ -9,7 +9,7 @@ import { getAccountInf } from "../utils/axios";
 function Dashboard() {
   const [userInfo, setUserInf] = React.useState([]);
   let history = useHistory();
-  React.useEffect(async () => {
+  React.useEffect(async() => {
     setUserInf(await getAccountInf());
   })
 
@@ -20,4 +20,4 @@ function Dashboard() {
   );
 }
 
-export default Homepage;
+export default Dashboard;
