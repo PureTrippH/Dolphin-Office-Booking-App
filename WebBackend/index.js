@@ -9,10 +9,10 @@ const app = express()
 
 require('./strategies/google');
 
-app.use(cors(({
-    methods:['GET','POST'],
-    credentials: true 
-  })));
+app.use( cors({
+    origin: ['http://localhost:3000'],
+    credentials: true,
+}))
   
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());

@@ -12,12 +12,12 @@ import Body from "../Components/LayoutComp/Body";
 
 function Dashboard() {
   const [userInfo, setUserInf] = React.useState([]);
-  let history = useHistory();
-  React.useEffect(async() => {
-    axios.get('http://localhost:3001/userInf').then(resp => {
-      console.log(resp)
-    })
-  })
+  React.useEffect(() => {
+    getAccountInf().then(({
+      data
+    }) => {
+      setUserInf(data);
+    })}, []);
 
 
 
@@ -29,7 +29,7 @@ function Dashboard() {
         }}>
       <Navibar>
         <p>test</p>
-        <img style={{
+        <img alt="CHC Logo" style={{
           "display": "block",
           "objectFit": "scale-down",
           "backgroundPosition": "center",
@@ -38,7 +38,11 @@ function Dashboard() {
         }}src={Dolphin}/>
         <p>test</p>
       </Navibar>
-      <Body />
+      <Body>
+        <h1>
+          Hello! {userInfo.given_name}
+        </h1>
+      </Body>
       <Navibar />
     </div>
 
