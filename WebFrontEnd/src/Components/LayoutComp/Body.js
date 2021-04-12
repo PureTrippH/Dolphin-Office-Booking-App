@@ -1,16 +1,16 @@
 import React from 'react';
 //import Button from "../../Button";
 
-const Navibar = (props) => {
+const Body = (props) => {
     return (
         <div className="NaviGrid" style={{"display": "grid", 
-        "gridTemplateColumns": "10% 80% 10%",
+        "gridTemplateColumns": "10% 90%",
         "maxHeight": "100%", 
         "border": "inset #db7972",
-        "justifyContent": "center",
-        "backgroundColor": "#b55c59"}}>
+        "alignItems": "center",
+        "backgroundColor": "#f7c3c1"}}>
                 {props.children}
         </div>
     )
 }
-export default Navibar;
+export default Body;

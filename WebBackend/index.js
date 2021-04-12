@@ -9,8 +9,11 @@ const app = express()
 
 require('./strategies/google');
 
-app.use(cors());
-
+app.use(cors(({
+    methods:['GET','POST'],
+    credentials: true 
+  })));
+  
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
@@ -22,11 +25,10 @@ app.use(cookieSession({
 
 //Auth Function
 const isLoggedIn = (req, res, next) => {
-    console.log(`User inf ${req.user}`);
     if(req.user) {
         next();
     } else {
-        res.status(401).send({msg: "You Are Not Authorized. Go to /google to login!"});
+        res.status(401).send(req);
     }
 }
 
