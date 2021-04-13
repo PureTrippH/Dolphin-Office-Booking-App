@@ -4,7 +4,7 @@ import React from 'react';
 const Body = (props) => {
     return (
         <div className="NaviGrid" style={{"display": "grid", 
-        "gridTemplateColumns": "10% 90%",
+        "gridTemplateColumns": "10% 80% 10%",
         "maxHeight": "100%", 
         "border": "inset #db7972",
         "alignItems": "center",

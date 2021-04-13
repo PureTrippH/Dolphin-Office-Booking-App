@@ -4,7 +4,8 @@ import React from "react";
 import axios from 'axios';
 import { useHistory } from "react-router-dom";
 import Dolphin from "../graphics/dolphingraphic.jpg"
-import { getAccountInf } from "../utils/axios";
+import Button from "../Components/Button"
+import { getAccountInf, clearCookie } from "../utils/axios";
 
 //Components
 import Navibar from "../Components/LayoutComp/Navibar";
@@ -30,20 +31,39 @@ function Dashboard() {
       <Navibar>
         <p>test</p>
         <img alt="CHC Logo" style={{
-          "display": "block",
-          "objectFit": "scale-down",
-          "backgroundPosition": "center",
+          "objectFit": "cover",
+          "maxHeight": "100%",
+          "maxWidth": "100%",
           "borderRadius": "20%",
-          "margin": "auto"
         }}src={Dolphin}/>
-        <p>test</p>
+        <Button clickEvent={clearCookie()}>Logout</Button>
       </Navibar>
       <Body>
-        <h1>
-          Hello! {userInfo.given_name}
-        </h1>
+        <div></div>
+        <div style={{
+          "backgroundColor": "#f0b1ad",
+          "minHeight": "100%",
+          "borderRight": "solid #c98471",
+          "borderLeft": "solid #c98471"
+        }}>
+          <div style={{"backgroundColor": "#bf5441", "border": "groove #914133"}}>
+            <h1>
+              Hello! {userInfo.given_name}
+            </h1>
+            <img style={{"borderRadius": "25%", "border": "groove #914133"}} src={userInfo.picture} />
+            </div>
+            <div>
+              <h2 style={{"padding": "5%", "backgroundColor": "#cc7464", "border": "groove #914133"}}>Your Appointments!</h2>
+            </div>
+            <div>
+              <h2 style={{"padding": "5%", "backgroundColor": "#cc7464", "border": "groove #914133"}}>Schedule an Appointment!</h2>
+            </div>
+          </div>
       </Body>
-      <Navibar />
+      <Navibar>
+        <div></div>
+
+      </Navibar>
     </div>
 
     </div>

@@ -28,6 +28,7 @@ const isLoggedIn = (req, res, next) => {
     if(req.user) {
         next();
     } else {
+        res.redirect('http://localhost:3000/');
         res.status(401).send(req);
     }
 }
@@ -48,6 +49,11 @@ app.listen(3001 , () => {
 app.get('/failed', isLoggedIn, (req, res) => res.send(`You failed to log in`));
 
 app.get('/userInf', isLoggedIn, (req, res) => res.send(req.user._json));
+
+app.get('/clear', isLoggedIn, (req, res) => {
+    res.clearCookie(`collegeApp`);
+    return res.redirect("http://localhost:3000/");
+});
 
 app.get("/google", passport.authenticate('google', { scope: ['profile', 'email'] }));
 
