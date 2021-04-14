@@ -50,6 +50,7 @@ app.listen(3001 , () => {
     console.log(`app listening on port 3001`)
 })
 
+
 app.get('/failed', isLoggedIn, (req, res) => res.send(`You failed to log in`));
 
 app.get('/userInf', isLoggedIn, (req, res) => res.send(req.user._json));
@@ -63,7 +64,7 @@ app.get('/logout', isLoggedIn, (req, res) => {
     req.logout();
 })
 
-app.get("/google", passport.authenticate('google', { scope: ['profile', 'email'] }));
+app.get("/google", passport.authenticate('google', { scope: ['profile', 'email', 'https://www.googleapis.com/auth/calendar'] }));
 
 app.get('/google/callback', 
   passport.authenticate('google', { failureRedirect: '/failed' }),
