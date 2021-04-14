@@ -6,6 +6,7 @@ const StyledButton = styled.button`
 border-width: 5px;
 border-color: #787473;
 border-radius:10px;
+font-size: 0.5fr;
 `
 
 const Button = (props) => {

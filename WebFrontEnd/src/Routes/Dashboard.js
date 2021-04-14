@@ -29,14 +29,17 @@ function Dashboard() {
         "gridTemplateRows": "10vh 85vh 5vh"
         }}>
       <Navibar>
-        <p>test</p>
+        <p style={{
+          "fontSize": "0.5fw"
+        }}>test</p>
         <img alt="CHC Logo" style={{
           "objectFit": "cover",
           "maxHeight": "100%",
           "maxWidth": "100%",
           "borderRadius": "20%",
+          "border": "solid #c98471",
+          "margin": "0 auto"
         }}src={Dolphin}/>
-        <Button clickEvent={clearCookie()}>Logout</Button>
       </Navibar>
       <Body>
         <div></div>
