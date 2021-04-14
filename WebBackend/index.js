@@ -1,14 +1,16 @@
 const express = require('express');
+const app = express();
+
+//MiddleWare
 const passport = require('passport');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const cookieSession = require('cookie-session');
-
-const app = express()
-//MiddleWare
+const mongo = require('./mongoose/mongo');
 
 require('./strategies/google');
 
+mongo.init();
 app.use( cors({
     origin: ['http://localhost:3000'],
     credentials: true,
