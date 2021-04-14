@@ -1,12 +1,14 @@
 const express = require('express');
 const app = express();
+const mongo = require('./mongoose/mongo');
+const fetch = require('node-fetch');
 
 //MiddleWare
 const passport = require('passport');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const cookieSession = require('cookie-session');
-const mongo = require('./mongoose/mongo');
+
 
 require('./strategies/google');
 
@@ -56,6 +58,10 @@ app.get('/clear', isLoggedIn, (req, res) => {
     res.clearCookie(`collegeApp`);
     return res.redirect("http://localhost:3000/");
 });
+
+app.get('/logout', isLoggedIn, (req, res) => {
+    req.logout();
+})
 
 app.get("/google", passport.authenticate('google', { scope: ['profile', 'email'] }));
 

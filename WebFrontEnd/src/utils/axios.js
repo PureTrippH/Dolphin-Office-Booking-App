@@ -1,10 +1,21 @@
 import axios from 'axios';
+
+//Get Google Account Info From User
 export const getAccountInf = async() => {
-        return axios.get('http://localhost:3001/userInf', {
-                withCredentials: true});
+        return axios.get('http://localhost:3001/userInf', 
+        { withCredentials: true });
         }
-        export const clearCookie = async() => {
-                axios.get('http://localhost:3001/clear')
-        }
-        
+
+//Clears the Website's Login Cookie to Logout
+export const clearCookie = async() => {
+        axios.get('http://localhost:3001/logout', 
+        { withCredentials: true });
+}
+
+//Get The Test Calendar from Google Classroom
+export const getCalendar = async() => {
+        axios.get('https://www.googleapis.com/calendar/v3/calendars/jmhanley22@student.capehenry.org', 
+        { withCredentials: true });
+}
+
         

@@ -5,7 +5,7 @@ import axios from 'axios';
 import { useHistory } from "react-router-dom";
 import Dolphin from "../graphics/dolphingraphic.jpg"
 import Button from "../Components/Button"
-import { getAccountInf, clearCookie } from "../utils/axios";
+import { getAccountInf, clearCookie, getCalendar } from "../utils/axios";
 
 //Components
 import Navibar from "../Components/LayoutComp/Navibar";
@@ -13,6 +13,7 @@ import Body from "../Components/LayoutComp/Body";
 
 function Dashboard() {
   const [userInfo, setUserInf] = React.useState([]);
+  const [calendar, setCalendar] = React.useState([]);
   React.useEffect(() => {
     getAccountInf().then(({
       data
@@ -20,7 +21,10 @@ function Dashboard() {
       setUserInf(data);
     })}, []);
 
-
+    React.useEffect(() => {
+      getCalendar().then((data) => {
+        setCalendar(data);
+      })}, []);
 
   return (
     <div className="App">
@@ -60,6 +64,7 @@ function Dashboard() {
             </div>
             <div>
               <h2 style={{"padding": "5%", "backgroundColor": "#cc7464", "border": "groove #914133"}}>Schedule an Appointment!</h2>
+              <Button clickEvent={clearCookie.then}>Logout</Button>
             </div>
           </div>
       </Body>
