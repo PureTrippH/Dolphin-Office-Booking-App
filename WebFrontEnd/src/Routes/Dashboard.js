@@ -19,12 +19,14 @@ function Dashboard() {
       data
     }) => {
       setUserInf(data);
-    })}, []);
-
-    React.useEffect(() => {
-      getCalendar().then((data) => {
-        setCalendar(data);
-      })}, []);
+      getCalendar(data.email).then(({
+        newData
+      }) => {
+        setCalendar(newData);
+      })
+    })
+  }
+  , []);
 
   return (
     <div className="App">
@@ -64,7 +66,7 @@ function Dashboard() {
             </div>
             <div>
               <h2 style={{"padding": "5%", "backgroundColor": "#cc7464", "border": "groove #914133"}}>Schedule an Appointment!</h2>
-              <Button clickEvent={clearCookie.then}>Logout</Button>
+              <Button clickEvent={console.log(userInfo)}>Logout</Button>
             </div>
           </div>
       </Body>

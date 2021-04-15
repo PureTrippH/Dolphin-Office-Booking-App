@@ -61,7 +61,7 @@ app.get('/clear', isLoggedIn, (req, res) => {
 });
 
 app.get('/logout', isLoggedIn, (req, res) => {
-    req.logout();
+    res.logou
 })
 
 app.get("/google", passport.authenticate('google', { scope: ['profile', 'email', 'https://www.googleapis.com/auth/calendar'] }));
