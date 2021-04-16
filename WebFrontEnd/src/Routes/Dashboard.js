@@ -19,13 +19,14 @@ function Dashboard() {
       data
     }) => {
       setUserInf(data);
-      getCalendar(data.email).then(({
-        newData
-      }) => {
-        setCalendar(newData);
-      })
     })
   }
+  , []);
+
+  React.useEffect(() => {
+    getCalendar('gtbunn23@student.capehenry.org').then((data) => {
+      console.log(data);
+    })}
   , []);
 
   return (

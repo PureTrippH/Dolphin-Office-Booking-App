@@ -55,16 +55,18 @@ app.get('/failed', isLoggedIn, (req, res) => res.send(`You failed to log in`));
 
 app.get('/userInf', isLoggedIn, (req, res) => res.send(req.user._json));
 
+app.get('/trueUserInf', isLoggedIn, (req, res) => res.send(req.user));
+
 app.get('/clear', isLoggedIn, (req, res) => {
     res.clearCookie(`collegeApp`);
     return res.redirect("http://localhost:3000/");
 });
 
 app.get('/logout', isLoggedIn, (req, res) => {
-    res.logou
+    res.logout
 })
 
-app.get("/google", passport.authenticate('google', { scope: ['profile', 'email', 'https://www.googleapis.com/auth/calendar'] }));
+app.get("/google", passport.authenticate('google', { scope: ['profile', 'email', 'https://www.googleapis.com/auth/calendar', 'https://www.googleapis.com/auth/calendar.events'] }));
 
 app.get('/google/callback', 
   passport.authenticate('google', { failureRedirect: '/failed' }),
