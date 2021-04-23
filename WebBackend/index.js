@@ -1,4 +1,5 @@
 const express = require('express');
+const {google} = require('googleapis');
 const app = express();
 const mongo = require('./mongoose/mongo');
 const fetch = require('node-fetch');
@@ -32,7 +33,6 @@ const isLoggedIn = (req, res, next) => {
     if(req.user) {
         next();
     } else {
-        res.redirect('http://localhost:3000/');
         res.status(401).send(req);
     }
 }
@@ -57,19 +57,31 @@ app.get('/userInf', isLoggedIn, (req, res) => res.send(req.user._json));
 
 app.get('/trueUserInf', isLoggedIn, (req, res) => res.send(req.user));
 
+app.get('/accessTokens', isLoggedIn, (req, res) => {
+    res.send(req.user);
+});
+
 app.get('/clear', isLoggedIn, (req, res) => {
     res.clearCookie(`collegeApp`);
     return res.redirect("http://localhost:3000/");
 });
 
+app.get("/calendarData", 
+passport.authenticate('google', { failureRedirect: '/failed' }),
+function(req, res) {
+  console.log(req.user.accessToken);
+  res.redirect('http://localhost:3000/Dashboard');
+});
+
 app.get('/logout', isLoggedIn, (req, res) => {
-    res.logout
+    res.logout();
 })
 
-app.get("/google", passport.authenticate('google', { scope: ['profile', 'email', 'https://www.googleapis.com/auth/calendar', 'https://www.googleapis.com/auth/calendar.events'] }));
+app.get("/google", passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/calendar', 'https://www.googleapis.com/auth/calendar'] }));
 
 app.get('/google/callback', 
   passport.authenticate('google', { failureRedirect: '/failed' }),
   function(req, res) {
+    console.log(req.user.accessToken);
     res.redirect('http://localhost:3000/Dashboard');
   });

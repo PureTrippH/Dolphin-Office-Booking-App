@@ -13,8 +13,8 @@ export const clearCookie = async() => {
 }
 
 //Get The Test Calendar from Google Classroom
-export const getCalendar = async(calendarID) => {
-        axios.get(`https://www.googleapis.com/calendar/v3/calendars/${calendarID}/events`, 
+export const getCalendar = async() => {
+        axios.get(`http://localhost:3001/getCalendar`, 
         { withCredentials: true });
 }
 

@@ -24,7 +24,7 @@ function Dashboard() {
   , []);
 
   React.useEffect(() => {
-    getCalendar('gtbunn23@student.capehenry.org').then((data) => {
+    getCalendar().then((data) => {
       console.log(data);
     })}
   , []);
