@@ -3,9 +3,10 @@ import '../App.css';
 import React from "react"; 
 import axios from 'axios';
 import { useHistory } from "react-router-dom";
+import Form from "../Components/form/Form"
 import Dolphin from "../graphics/dolphingraphic.jpg"
 import Button from "../Components/Button"
-import { getAccountInf, clearCookie, getCalendar } from "../utils/axios";
+import { getAccountInf, clearCookie, getCalendar, logout} from "../utils/axios";
 
 //Components
 import Navibar from "../Components/LayoutComp/Navibar";
@@ -36,9 +37,7 @@ function Dashboard() {
         "gridTemplateRows": "10vh 85vh 5vh"
         }}>
       <Navibar>
-        <p style={{
-          "fontSize": "0.5fw"
-        }}>test</p>
+      <Button clickEvent={logout}>Logout</Button>
         <img alt="CHC Logo" style={{
           "objectFit": "cover",
           "maxHeight": "100%",
@@ -65,9 +64,9 @@ function Dashboard() {
             <div>
               <h2 style={{"padding": "5%", "backgroundColor": "#cc7464", "border": "groove #914133"}}>Your Appointments!</h2>
             </div>
-            <div>
+            <div style={{"backgroundColor": "#ba8e8a"}}>
               <h2 style={{"padding": "5%", "backgroundColor": "#cc7464", "border": "groove #914133"}}>Schedule an Appointment!</h2>
-              <Button clickEvent={console.log(userInfo)}>Logout</Button>
+              <Form></Form>
             </div>
           </div>
       </Body>

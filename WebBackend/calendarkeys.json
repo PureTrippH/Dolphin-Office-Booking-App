@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "collegeschedule",
+  "private_key_id": "449a7d410fbdd0f1202c8bfe4dd06c404579c927",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDg3BUQHta72FUm\npAUE+gQmGSIQZPi+xeVYzecZ4LX8d26dztHJEVEmwx37pUMYL5UUjRjtPQGZxo12\nOMoxumlLsDmOrwAk7IgGPJCg0ExDxvt5s8GrOzwf8F1W17XIpuKR4+Ija2mVOgfT\n2TPSbSA/RubEbnQutfaJ8L2PUQg+jiG0NFEy17SZVsu0wFZv0bfFSFW8QqUUTxKH\nn8wfuu8q23NMxWzaHJx0uFa69p85IoVKu7hEXnszmW43zyupd13ayYbMvo4TX51z\nyZTo2EHeGn5HvbSf9CDM/jgIzEcRqjeAO+tTFvcPMwF7IfzFDMct08M7DZ4l3IyW\nDgYx9NIzAgMBAAECggEAI0jl1T3BnIB5/DJIx1skQ4Y2HjR6BBWxw5mr5heo9xEW\nvpSxvseE4HxFvDNWr/jnf+4UN0YXdjX+BMssj1kdJM9meMllUGX9gl0GpPWKwif7\nVkGq5l/JM4nYW8RFtlLZwuLrnXtBejU8/TVcOGz/Xm6Vz8U1Xg8XvNWWKWMh1A7W\nVpqsfNYkQ0gIECx8TQKrVcZVc2miRzuIi5u/71hxSTV+WGEGKpxnT5l6LZIWN0fY\nz89gFbkrO3PrlpM4JsVhf4iltDrV4qREgCwlUPtwKLzpln1kf+cEfyeVLf5Q6m4R\np6K0Vfu/bx/My65OFoVciJMkCvWXd8wdpmuNr1wzQQKBgQDwSDBdnptgZI03mjyv\nh1fJr/sDSimDgf5zdfSuSX+3bzRMvBSwjC/JXOMRXW9qbV3y1HTi95VDBNcVDu4V\nbi64h83nAMOhgqBgmUxFfIV5VV8DXdwHKblEKv3Avs0zEgtD1xZkKsDC4W163YVD\nbyXuC9/y3AmpM5MrwIZNFvALawKBgQDvkaDmWR+5b4cUpWdclw1JxzIoe3sRa1ZN\ncPOdz0B6tDckoHA/v6wOCiwNumwgv3gZMRHDjHshkHXmlu+n9KYjKRv0T8zefS1i\nx44AVbOjfSfBuWpQ09b7JbvaOXrfmuEQyv3/n2xGB8EMDiav2wsdsIw+WJommS4P\nOKyP6OMOWQKBgQC9kLZXpeH/UlT3IP/vm19vBx+JoODPl6cfgFfhiKryFRG12Eya\nXH725glekdBsrowIIAV3asyfaxokyvqafaruenW/YaL1sRDGJSs/RtYmu2uSRGJq\nZEh9t00q210YhYvNoctQi0o4dZDh9hJE+VN7UnMELwSQMNhTFDjgaNBIsQKBgB+/\nb9A27WJYqlENHmaBygwF7tq4inWjgNtgZZh7N7NLIKek71szXmy54l6rXtr0JMlJ\n3G3KtyKaj1VQmU/rtvyf3QmCbcbqVdJqWaInuVeoJVWh6bnuaOX9eSiRR3xMfRkJ\nnaF7khCxxF6BnZTedVmo5Nz6Rutoj1cLDqs/lJ95AoGBAMeL1dNl962xlstWTRUm\npmG30vcd3C4l0S1H+5H7zm4b3JZ6vTZEfq9kFTINRjSW6bxvtBS2D7Msey8u0rYC\nFtEd4EJRXLs89nqQcqHI5S4xZ1NRZwB9JZNwenuRnkTTrEwYGnKumMPz2ul5+8ip\nmELcD38VDrbGd8h4IMyKjc0C\n-----END PRIVATE KEY-----\n",
+  "client_email": "collegeschedule@appspot.gserviceaccount.com",
+  "client_id": "107076191541574687495",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/collegeschedule%40appspot.gserviceaccount.com"
+}

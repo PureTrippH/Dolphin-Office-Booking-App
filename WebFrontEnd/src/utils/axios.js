@@ -18,4 +18,10 @@ export const getCalendar = async() => {
         { withCredentials: true });
 }
 
+export const logout = async() => {
+        axios.get(`http://localhost:3001/logout`, 
+        { withCredentials: true });
+}
+
+
         
