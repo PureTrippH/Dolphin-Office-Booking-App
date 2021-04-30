@@ -3,7 +3,7 @@ const app = express();
 const mongo = require('./mongoose/mongo');
 const fetch = require('node-fetch');
 const { google } = require('googleapis');
-const { addWeeks } = require('date-fns');
+const { addWeeks, addDays } = require('date-fns');
 //MiddleWare
 const passport = require('passport');
 const cors = require('cors');
@@ -29,11 +29,11 @@ app.use(cookieSession({
 ));
 //Auth Function
 const isLoggedIn = (req, res, next) => {
-    if(req.user.id) {
-        next();
-    } else {
+    if(!req.user) {
         res.redirect('http://localhost:3000/');
         res.status(401).send("NOpe");
+    } else {
+        next();
     }
 }
 
@@ -49,13 +49,12 @@ app.get("/", (req, res) => {
 app.listen(3001 , () => {
     console.log(`app listening on port 3001`)
 })
-passport.transformAuthInfo
 
 app.get('/calendar', isLoggedIn, (req, res) => passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/calendar.readonly'] }));
 
 app.get('/failed', isLoggedIn, (req, res) => res.send(`You failed to log in`));
 
-app.get('/userInf', isLoggedIn, (req, res) => res.send(req.user._json));
+app.get('/userInf', isLoggedIn, (req, res) => res.send(req.user));
 
 
 app.get('/clear', isLoggedIn, (req, res) => {
@@ -63,37 +62,40 @@ app.get('/clear', isLoggedIn, (req, res) => {
     return res.redirect("http://localhost:3000/");
 });
 
+//Function to get A Calendar Using the Google Calendar API
 app.get('/calendar/:id', isLoggedIn, (req, res) => {
     let id = req.params.id;
-    let calendar = google.calendar({version: 'v3', auth: settings.APIKey});
+    const oauth2Client = new google.auth.OAuth2()
+    console.log(`Access Token: ${req.user.accesstoken}`);
+    oauth2Client.setCredentials({
+        'access_token': req.user.accessToken,
+    });
+    let calendar = google.calendar({version: 'v3', auth: oauth2Client});
+    //Get Calendar
     calendar.events.list({
-        calendarId: 'jmhanley22@student.capehenry.org',
-        timeMax: addWeeks(new Date(), 1).toISOString(), // Let's get events for one week
+        calendarId: id,
+        timeMax: addDays(new Date(), 7).toISOString(), // Let's get events for one week
+        timeMin: addDays(new Date(), -7).toISOString(),
         singleEvents: true,
         orderBy: 'startTime',
     }, (err, content) => {
-        console.log(err);
+        //PROBLEM: Calendar Not Found.
         if(err) res.send({message: `${err}. Can not access ${req.params.id}'s Calendar`});
+        else res.send(content);
     })
 })
 
-app.get('/google/keys', 
-  passport.authenticate('google', {  failureRedirect: '/failed' }),
-    (req, res)=> {
-        res.send(req.authInfo);
-    }
-);
-
+//Logout of Passport Session
 app.get('/logout', isLoggedIn, (req, res) => {
     req.session = null;
     req.logout();
     res.redirect('h');
 })
-app.get("/google", passport.authenticate('google', { scope: ['profile', 'email', 'https://www.googleapis.com/auth/calendar.events', 'https://www.googleapis.com/auth/calendar.readonly'] }));
+// Authenticate with Passport OAuth
+app.get("/google", passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/calendar.events', 'https://www.googleapis.com/auth/calendar.readonly', 'profile', 'email'] }));
 
 app.get('/google/callback', 
   passport.authenticate('google', {  failureRedirect: '/failed' }),
   function(req, res) {
-    google.auth.getAccessToken();
     res.redirect('http://localhost:3000/Dashboard');
   });

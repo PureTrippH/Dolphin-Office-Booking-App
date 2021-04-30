@@ -16,19 +16,12 @@ function Dashboard() {
   const [userInfo, setUserInf] = React.useState([]);
   const [calendar, setCalendar] = React.useState([]);
   React.useEffect(() => {
-    getAccountInf().then(({
-      data
-    }) => {
+    getAccountInf().then( data => {
       setUserInf(data);
     })
   }
   , []);
 
-  React.useEffect(() => {
-    getCalendar().then((data) => {
-      console.log(data);
-    })}
-  , []);
 
   return (
     <div className="App">
@@ -57,7 +50,7 @@ function Dashboard() {
         }}>
           <div style={{"backgroundColor": "#bf5441", "border": "groove #914133"}}>
             <h1>
-              Hello! {userInfo.given_name}
+              Hello! {userInfo}
             </h1>
             <img style={{"borderRadius": "25%", "border": "groove #914133"}} src={userInfo.picture} />
             </div>
