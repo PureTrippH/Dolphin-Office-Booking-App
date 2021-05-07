@@ -16,6 +16,7 @@ const settings = require('../settings.json');
 let strat = require('./strategies/google');
 
 mongo.init();
+//Middleware Initialization
 app.use( cors({
     origin: ['http://localhost:3000'],
     credentials: true,
@@ -63,6 +64,20 @@ app.get('/clear', isLoggedIn, (req, res) => {
 });
 
 //Function to get A Calendar Using the Google Calendar API
+app.get('/calendar/add/:id/:newTimeAndDate/:name', isLoggedIn, (res=q, res) => {
+    let id = req.params.id;
+    const oauth2Client = new google.auth.OAuth2()
+    console.log(`Access Token: ${req.user.accesstoken}`);
+    oauth2Client.setCredentials({
+        'access_token': req.user.accessToken,
+    });
+    let calendar = google.calendar({version: 'v3', auth: oauth2Client});
+    calendar.events.quickAdd({
+        calendarId: id,
+        text: `Automated College Appointment - By ${req.params.name}`
+    })
+}) 
+
 app.get('/calendar/:id', isLoggedIn, (req, res) => {
     let id = req.params.id;
     const oauth2Client = new google.auth.OAuth2()
@@ -75,7 +90,7 @@ app.get('/calendar/:id', isLoggedIn, (req, res) => {
     calendar.events.list({
         calendarId: id,
         timeMax: addDays(new Date(), 7).toISOString(), // Let's get events for one week
-        timeMin: addDays(new Date(), -7).toISOString(),
+        timeMin: addDays(new Date(), 0).toISOString(),
         singleEvents: true,
         orderBy: 'startTime',
     }, (err, content) => {

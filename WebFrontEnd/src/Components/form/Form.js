@@ -6,7 +6,7 @@ import {Form, Field, ErrorMessage } from 'formik';
 const ScheduleForm = (props) => {
     return(
         <Formik
-            initialValues={{ date: '', password: '' }}
+            initialValues={{ date: '', phoneNum: '' }}
             validate={values => {
                 const errors = {};
                 if (!values.date) {
@@ -27,8 +27,8 @@ const ScheduleForm = (props) => {
                 <Field style={{"borderRadius": "10px"}} type="datetime-local" name="date" />
                 <ErrorMessage name="date" component="div" />
                 <h3>Phone Number</h3>
-                <Field style={{"borderRadius": "10px"}} type="password" name="password" />
-                <ErrorMessage name="password" component="div" />
+                <Field style={{"borderRadius": "10px"}} type="phoneNum" name="phoneNum" />
+                <ErrorMessage name="phoneNum" component="div" />
                 <button style={{"display": "block", "fontSize": "1rem"}} type="submit" disabled={isSubmitting}>
                     Submit
                 </button>

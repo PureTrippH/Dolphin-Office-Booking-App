@@ -16,13 +16,16 @@ function Dashboard() {
   const [userInfo, setUserInf] = React.useState([]);
   const [calendar, setCalendar] = React.useState([]);
   React.useEffect(() => {
-    getAccountInf().then( data => {
+    getAccountInf().then(({
+      data
+    }) => {
       setUserInf(data);
     })
-  }
-  , []);
-
-
+  }, []);
+  
+  getCalendar().then(data => {
+    console.log(data.data);
+  })
   return (
     <div className="App">
       <div className="MainGrid" style={{
@@ -40,7 +43,7 @@ function Dashboard() {
           "margin": "0 auto"
         }}src={Dolphin}/>
       </Navibar>
-      <Body>
+      <Body style={{'overflow-y': "scroll"}}>
         <div></div>
         <div style={{
           "backgroundColor": "#f0b1ad",
@@ -48,17 +51,17 @@ function Dashboard() {
           "borderRight": "solid #c98471",
           "borderLeft": "solid #c98471"
         }}>
-          <div style={{"backgroundColor": "#bf5441", "border": "groove #914133"}}>
+          <div style={{"backgroundColor": "#bf5441", "border": "groove #914133", "maxHeight": "100%"}}>
             <h1>
-              Hello! {userInfo}
+              Hello! {userInfo.name}
             </h1>
-            <img style={{"borderRadius": "25%", "border": "groove #914133"}} src={userInfo.picture} />
+            <img style={{"borderRadius": "25%", "border": "groove #914133", "maxHeight": "100%"}} src={userInfo.pic_url} />
             </div>
             <div>
-              <h2 style={{"padding": "5%", "backgroundColor": "#cc7464", "border": "groove #914133"}}>Your Appointments!</h2>
+              <h2 style={{"padding": "5%", "backgroundColor": "#cc7464", "border": "groove #914133", "maxHeight": "100%"}}>Your Appointments!</h2>
             </div>
             <div style={{"backgroundColor": "#ba8e8a"}}>
-              <h2 style={{"padding": "5%", "backgroundColor": "#cc7464", "border": "groove #914133"}}>Schedule an Appointment!</h2>
+              <h2 style={{"padding": "5%", "backgroundColor": "#cc7464", "border": "groove #914133", "maxHeight": "100%"}}>Schedule an Appointment!</h2>
               <Form></Form>
             </div>
           </div>
