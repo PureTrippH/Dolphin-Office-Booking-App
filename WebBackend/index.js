@@ -4,6 +4,7 @@ const mongo = require('./mongoose/mongo');
 const fetch = require('node-fetch');
 const { google } = require('googleapis');
 const { addWeeks, addDays } = require('date-fns');
+const appointSchema = require('./mongoose/schemas/AppSchem');
 //MiddleWare
 const passport = require('passport');
 const cors = require('cors');
@@ -64,7 +65,7 @@ app.get('/clear', isLoggedIn, (req, res) => {
 });
 
 //Function to get A Calendar Using the Google Calendar API
-app.get('/calendar/add/:id/:newTimeAndDate/:name', isLoggedIn, (res=q, res) => {
+app.get('/calendar/add/:id/:newTimeAndDate/:name', isLoggedIn, (req, res) => {
     let id = req.params.id;
     const oauth2Client = new google.auth.OAuth2()
     console.log(`Access Token: ${req.user.accesstoken}`);
@@ -77,6 +78,20 @@ app.get('/calendar/add/:id/:newTimeAndDate/:name', isLoggedIn, (res=q, res) => {
         text: `Automated College Appointment - By ${req.params.name}`
     })
 }) 
+
+app.post('/calendarInfo/writeReq', isLoggedIn, async (req, res) => {
+    let postBody = req.body;
+    if(!req.body) res.send({message: `${err}. The POST Request Body is Empty. Please fill it
+    with Email, PhoneNumber, Date, Message, and Name`})
+    await appointSchema.create({
+        _id: mongoose,
+        Email: postBody.email,
+        PhoneNumber: postBody.phoneNum,
+        Date: postBody.date,
+        Message: postBody.message,
+        Name: postBody.name,
+    })
+})
 
 app.get('/calendar/:id', isLoggedIn, (req, res) => {
     let id = req.params.id;
