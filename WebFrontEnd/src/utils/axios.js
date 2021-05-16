@@ -8,7 +8,18 @@ export const getAccountInf = async() => {
 
 //Get The Test Calendar from Google Calendar
 export const getCalendar = async(calID) => {
-        axios.get(`http://localhost:3001/calendar/${calID}`, 
+        return axios.get(`http://localhost:3001/calendar/${calID}`, 
+        { withCredentials: true });
+}
+
+export const writeToDB = async(email, phoneNum, date, message, name) => {
+        return axios.post(`http://localhost:3001/calendarInfo/writeReq`, {
+                "Email": email,
+                "PhoneNumber": phoneNum,
+                "Date": date,
+                "Message": message,
+                "Name": name,
+        },
         { withCredentials: true });
 }
 

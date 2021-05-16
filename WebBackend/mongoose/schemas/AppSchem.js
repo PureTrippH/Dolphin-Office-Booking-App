@@ -7,6 +7,7 @@ const appSchema = mongoose.Schema({
     Date: String,
     Message: String,
     Name: String,
+    Status: String,
 })
 
 module.exports = mongoose.model("Appointment", appSchema, 'appointments');

@@ -1,12 +1,15 @@
 import React from "react";
 import { Formik } from 'formik';
 import {Form, Field, ErrorMessage } from 'formik';
-
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+import { writeToDB } from '../../utils/axios';
 
 const ScheduleForm = (props) => {
+    
     return(
         <Formik
-            initialValues={{ date: '', phoneNum: '' }}
+            initialValues={{ date: '', phoneNum: '', message: ''}}
             validate={values => {
                 const errors = {};
                 if (!values.date) {
@@ -16,8 +19,9 @@ const ScheduleForm = (props) => {
             }}
             onSubmit={(values, { setSubmitting }) => {
                 setTimeout(() => {
-                alert(JSON.stringify(values, null, 2));
-                setSubmitting(false);
+                let vals = JSON.stringify(values, null, 2);
+                console.log(props);
+                writeToDB(props.email, values.phoneNum, values.date, values.message, props.name);
                 }, 400);
             }}
         >
@@ -28,10 +32,12 @@ const ScheduleForm = (props) => {
                 <ErrorMessage name="date" component="div" />
                 <h3>Phone Number</h3>
                 <Field style={{"borderRadius": "10px"}} type="phoneNum" name="phoneNum" />
-                <ErrorMessage name="phoneNum" component="div" />
-                <button style={{"display": "block", "fontSize": "1rem"}} type="submit" disabled={isSubmitting}>
+                <h3>Message</h3>
+                <Field as={TextField} style={{"borderRadius": "10px", "marginBottom": "2%"}} type="message" name="message" />
+                <ErrorMessage  name="phoneNum" component="div" />
+                <Button style={{"margin": "auto"}} color="error" variant="contained" fullWidth type="submit" disabled={isSubmitting}>
                     Submit
-                </button>
+                </Button>
                 </Form>
             )}
         </Formik>

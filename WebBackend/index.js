@@ -37,8 +37,7 @@ app.use(cookieSession({
 //Auth Function
 const isLoggedIn = (req, res, next) => {
     if(!req.user) {
-        //res.redirect('http://localhost:3000/');
-        //res.status(401).send("NOpe");
+        return res.status(401).send("NOpe");
         next()
     } else {
         next();
@@ -64,6 +63,13 @@ app.get('/failed', isLoggedIn, (req, res) => res.send(`You failed to log in`));
 
 app.get('/userInf', isLoggedIn, (req, res) => res.send(req.user));
 
+app.get('/appointments/:id/', isLoggedIn, async (req, res) => {
+    let params = req.params.id;
+    let appointments = await appointSchema.find({
+        Name: params
+    });
+    res.send(appointments);
+});
 
 app.get('/clear', isLoggedIn, (req, res) => {
     res.clearCookie(`collegeApp`);
@@ -97,6 +103,7 @@ app.post('/calendarInfo/writeReq', isLoggedIn, async (req, res) => {
         Date: postBody.Date,
         Message: postBody.Message,
         Name: postBody.Name,
+        Status: "pending"
       });
       appointment.save().then(results => {
         if(results) {res.sendStatus(200);}
@@ -106,7 +113,8 @@ app.post('/calendarInfo/writeReq', isLoggedIn, async (req, res) => {
 app.get('/calendar/:id', isLoggedIn, (req, res) => {
     let id = req.params.id;
     const oauth2Client = new google.auth.OAuth2()
-    console.log(`Access Token: ${req.user.accesstoken}`);
+    console.log(req.user);
+    console.log(`Access Token: ${req.user.accessToken}`);
     oauth2Client.setCredentials({
         'access_token': req.user.accessToken,
     });

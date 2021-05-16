@@ -3,9 +3,11 @@ import '../App.css';
 import React from "react"; 
 import axios from 'axios';
 import { useHistory } from "react-router-dom";
-import Form from "../Components/form/Form"
-import Dolphin from "../graphics/dolphingraphic.jpg"
-import Button from "../Components/Button"
+import ScheduleForm from "../Components/form/Form";
+import Dolphin from "../graphics/dolphingraphic.jpg";
+import Button from "../Components/Button";
+import BaseGrid from "../Components/Bases/BaseGrid";
+import Border from "../Components/Border";
 import { getAccountInf, clearCookie, getCalendar, logout} from "../utils/axios";
 
 //Components
@@ -20,18 +22,16 @@ function Dashboard() {
       data
     }) => {
       setUserInf(data);
+      console.log(data);
     })
   }, []);
   
-  getCalendar().then(data => {
-    console.log(data.data);
+  getCalendar('primary').then(data => {
+    console.log(data);
   })
   return (
     <div className="App">
-      <div className="MainGrid" style={{
-        "display": "grid", 
-        "gridTemplateRows": "10vh 85vh 5vh"
-        }}>
+      <BaseGrid gridtemplaterows="5% 90% 5%">
       <Navibar>
       <Button clickEvent={logout}>Logout</Button>
         <img alt="CHC Logo" style={{
@@ -43,7 +43,7 @@ function Dashboard() {
           "margin": "0 auto"
         }}src={Dolphin}/>
       </Navibar>
-      <Body style={{'overflow-y': "scroll"}}>
+      <Body>
         <div></div>
         <div style={{
           "backgroundColor": "#f0b1ad",
@@ -51,18 +51,20 @@ function Dashboard() {
           "borderRight": "solid #c98471",
           "borderLeft": "solid #c98471"
         }}>
-          <div style={{"backgroundColor": "#bf5441", "border": "groove #914133", "maxHeight": "100%"}}>
-            <h1>
+          <div style={{"backgroundColor": "#bf5441", "border": "groove #914133", "margin": "auto"}}>
+            <h1 style={{"margin": "5px"}}>
               Hello! {userInfo.name}
+              <Border/>
             </h1>
-            <img style={{"borderRadius": "25%", "border": "groove #914133", "maxHeight": "100%"}} src={userInfo.pic_url} />
+            <img style={{"borderRadius": "25%", "border": "groove #914133"}} src={userInfo.pic_url} />
             </div>
             <div>
-              <h2 style={{"padding": "5%", "backgroundColor": "#cc7464", "border": "groove #914133", "maxHeight": "100%"}}>Your Appointments!</h2>
+              <h2 style={{"padding": "2%", "backgroundColor": "#cc7464", "border": "groove #914133"}}>Your Appointments!
+              </h2>
             </div>
             <div style={{"backgroundColor": "#ba8e8a"}}>
-              <h2 style={{"padding": "5%", "backgroundColor": "#cc7464", "border": "groove #914133", "maxHeight": "100%"}}>Schedule an Appointment!</h2>
-              <Form></Form>
+              <h2 style={{"padding": "2%", "margin": "auto", "backgroundColor": "#cc7464", "border": "groove #914133"}}>Schedule an Appointment!</h2>
+              <ScheduleForm name={userInfo.name} email={userInfo.email}></ScheduleForm>
             </div>
           </div>
       </Body>
@@ -70,8 +72,7 @@ function Dashboard() {
         <div></div>
 
       </Navibar>
-    </div>
-
+      </BaseGrid>
     </div>
   );
 }
