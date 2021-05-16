@@ -9,6 +9,8 @@ const appointSchema = require('./mongoose/schemas/AppSchem');
 const passport = require('passport');
 const cors = require('cors');
 const cookieSession = require('cookie-session');
+const mongoose = require('mongoose');
+var bodyParser = require('body-parser');
 
 //keys
 const credentials = require('./calendarkeys.json');
@@ -23,6 +25,9 @@ app.use( cors({
     credentials: true,
 }))
 
+app.use(bodyParser.urlencoded());
+
+app.use(bodyParser.json());
 
 app.use(cookieSession({
     name: 'collegeApp',
@@ -32,8 +37,9 @@ app.use(cookieSession({
 //Auth Function
 const isLoggedIn = (req, res, next) => {
     if(!req.user) {
-        res.redirect('http://localhost:3000/');
-        res.status(401).send("NOpe");
+        //res.redirect('http://localhost:3000/');
+        //res.status(401).send("NOpe");
+        next()
     } else {
         next();
     }
@@ -65,7 +71,7 @@ app.get('/clear', isLoggedIn, (req, res) => {
 });
 
 //Function to get A Calendar Using the Google Calendar API
-app.get('/calendar/add/:id/:newTimeAndDate/:name', isLoggedIn, (req, res) => {
+app.get('/calendar/add/:id/:newTimeAndDate/:name', (req, res) => {
     let id = req.params.id;
     const oauth2Client = new google.auth.OAuth2()
     console.log(`Access Token: ${req.user.accesstoken}`);
@@ -81,15 +87,19 @@ app.get('/calendar/add/:id/:newTimeAndDate/:name', isLoggedIn, (req, res) => {
 
 app.post('/calendarInfo/writeReq', isLoggedIn, async (req, res) => {
     let postBody = req.body;
-    if(!req.body) res.send({message: `${err}. The POST Request Body is Empty. Please fill it
-    with Email, PhoneNumber, Date, Message, and Name`})
-    await appointSchema.create({
-        _id: mongoose,
-        Email: postBody.email,
-        PhoneNumber: postBody.phoneNum,
-        Date: postBody.date,
-        Message: postBody.message,
-        Name: postBody.name,
+    if(!postBody) return res.send({message: `The POST Request Body is Empty. Please fill it
+    with Email, PhoneNumber, Date, Message, and Name`});
+    console.log(postBody);
+    const appointment = new appointSchema({
+        _id: mongoose.Types.ObjectId(),
+        Email: postBody.Email,
+        PhoneNumber: postBody.PhoneNumber,
+        Date: postBody.Date,
+        Message: postBody.Message,
+        Name: postBody.Name,
+      });
+      appointment.save().then(results => {
+        if(results) {res.sendStatus(200);}
     })
 })
 
