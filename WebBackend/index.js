@@ -3,18 +3,22 @@ const app = express();
 const mongo = require('./mongoose/mongo');
 const fetch = require('node-fetch');
 const { google } = require('googleapis');
-const { addWeeks, addDays } = require('date-fns');
+const { parseISO, format, addWeeks, addDays } = require('date-fns');
 const appointSchema = require('./mongoose/schemas/AppSchem');
 //MiddleWare
 const passport = require('passport');
 const cors = require('cors');
 const cookieSession = require('cookie-session');
 const mongoose = require('mongoose');
+const twilio = require('twilio');
+
 var bodyParser = require('body-parser');
 
 //keys
 const credentials = require('./calendarkeys.json');
 const settings = require('../settings.json');
+
+const twilioClient = new twilio(settings.accountSid, settings.authToken);
 
 let strat = require('./strategies/google');
 
@@ -106,7 +110,17 @@ app.post('/calendarInfo/writeReq', isLoggedIn, async (req, res) => {
         Status: "pending"
       });
       appointment.save().then(results => {
-        if(results) {res.sendStatus(200);}
+        if(results) {
+            twilioClient.messages.create({
+                body: `Hello ${postBody.Name}!
+You have successfully made an appointment with the CHC College Counseling Office on: 
+${format(parseISO(postBody.Date), "MM/dd/yyyy 'at' HH:mm")}! 
+To See Your Appointment Details, go to the website!`,
+                to: `+1${postBody.PhoneNumber}`,
+                from: "+16109917922"
+            })    
+            res.sendStatus(200);
+        }
     })
 })
 
@@ -120,13 +134,17 @@ app.get('/calendar/:id', isLoggedIn, (req, res) => {
     });
     let calendar = google.calendar({version: 'v3', auth: oauth2Client});
     //Get Calendar
+    calendar.calendars.get({
+        calendarId: id
+    },
+    /*
     calendar.events.list({
         calendarId: id,
         timeMax: addDays(new Date(), 7).toISOString(), // Let's get events for one week
         timeMin: addDays(new Date(), 0).toISOString(),
         singleEvents: true,
         orderBy: 'startTime',
-    }, (err, content) => {
+    },*/ (err, content) => {
         //PROBLEM: Calendar Not Found.
         if(err) res.send({message: `${err}. Can not access ${req.params.id}'s Calendar`});
         else res.send(content);

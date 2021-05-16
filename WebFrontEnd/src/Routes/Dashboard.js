@@ -63,7 +63,7 @@ function Dashboard() {
               </h2>
             </div>
             <div style={{"backgroundColor": "#ba8e8a"}}>
-              <h2 style={{"padding": "2%", "margin": "auto", "backgroundColor": "#cc7464", "border": "groove #914133"}}>Schedule an Appointment!</h2>
+              <h2 style={{"margin": "auto", "backgroundColor": "#cc7464", "border": "groove #914133"}}>Schedule an Appointment!</h2>
               <ScheduleForm name={userInfo.name} email={userInfo.email}></ScheduleForm>
             </div>
           </div>
