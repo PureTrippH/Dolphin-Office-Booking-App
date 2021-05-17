@@ -111,14 +111,14 @@ app.post('/calendarInfo/writeReq', isLoggedIn, async (req, res) => {
       });
       appointment.save().then(results => {
         if(results) {
-            twilioClient.messages.create({
+          /*  twilioClient.messages.create({
                 body: `Hello ${postBody.Name}!
 You have successfully made an appointment with the CHC College Counseling Office on: 
 ${format(parseISO(postBody.Date), "MM/dd/yyyy 'at' HH:mm")}! 
 To See Your Appointment Details, go to the website!`,
                 to: `+1${postBody.PhoneNumber}`,
                 from: "+16109917922"
-            })    
+            })    */
             res.sendStatus(200);
         }
     })
