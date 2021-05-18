@@ -8,12 +8,19 @@ import Dolphin from "../graphics/dolphingraphic.jpg";
 import Button from "../Components/Button";
 import BaseGrid from "../Components/Bases/BaseGrid";
 import Border from "../Components/Border";
+import styled from "styled-components";
 import { getAccountInf, clearCookie, getCalendar, logout} from "../utils/axios";
 
 //Components
 import Navibar from "../Components/LayoutComp/Navibar";
 import Body from "../Components/LayoutComp/Body";
 
+const Grid = styled.div`
+display: grid;
+grid-template-rows: 0.1fr 1.7fr 0.1fr;
+gap: 0px 0px;
+height: ${props => props.height ? props.height : "100vh"};
+`;
 function Dashboard() {
   const [userInfo, setUserInf] = React.useState([]);
   const [calendar, setCalendar] = React.useState([]);
@@ -31,14 +38,11 @@ function Dashboard() {
   })
   return (
     <div className="App">
-      <BaseGrid gridtemplaterows="5% 90% 5%" height="100%">
+      <Grid>
       <Navibar>
       <Button clickEvent={logout}>Logout</Button>
         <img alt="CHC Logo" style={{
-          "objectFit": "cover",
-          "maxHeight": "100%",
-          "maxWidth": "100%",
-          "borderRadius": "20%",
+          "width": "100px", "margin": "10px", "border-radius": "10px",
           "border": "solid #c98471",
           "margin": "0 auto"
         }}src={Dolphin}/>
@@ -47,7 +51,6 @@ function Dashboard() {
         <div style={{
           "backgroundColor": "#f0b1ad",
           "minHeight": "100%",
-          "overflowY": "scroll",
           "borderRight": "solid #c98471",
           "borderLeft": "solid #c98471",
         }}>
@@ -68,11 +71,10 @@ function Dashboard() {
             <ScheduleForm name={userInfo.name} email={userInfo.email}></ScheduleForm>
           </div>
           </div>
-      <Navibar>
-        <div></div>
+      <div style={{"minHeight": "100%", "border": "inset #db7972", "backgroundColor": "#d47572"}}>
 
-      </Navibar>
-      </BaseGrid>
+      </div>
+      </Grid>
     </div>
   );
 }
