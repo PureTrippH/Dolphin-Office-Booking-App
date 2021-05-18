@@ -1,6 +1,8 @@
 import axios from 'axios';
 
 //Get Google Account Info From User
+
+//Get Google Account Info From User
 export const getAccountInf = async() => {
         return axios.get('http://localhost:3001/userInf', 
         { withCredentials: true });
@@ -23,6 +25,11 @@ export const writeToDB = async(email, phoneNum, date, message, name) => {
         { withCredentials: true });
 }
 
+export const getApps = async(name) => {
+        return axios.get(`http://localhost:3001/appointments/${name}`, 
+        { withCredentials: true });
+}
+
 //Clears the Website's Login Cookie to Logout
 export const clearCookie = async() => {
         axios.get('http://localhost:3001/logout', 
@@ -34,6 +41,5 @@ export const logout = async() => {
         axios.get(`http://localhost:3001/logout`, 
         { withCredentials: true });
 }
-
 
         

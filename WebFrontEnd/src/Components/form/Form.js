@@ -28,10 +28,10 @@ const ScheduleForm = (props) => {
             {({ isSubmitting }) => (
                 <Form style={{"backgroundColor": "#f2c1bd","padding": "2%", "margin": "5%", "border": "groove #e6b7b3 3px"}}>
                 <h3>Appointment Date</h3>
-                <Field style={{"borderRadius": "10px"}} type="datetime-local" name="date" />
+                <Field as={TextField} style={{"borderRadius": "10px"}} type="datetime-local" name="date" />
                 <ErrorMessage name="date" component="div" />
                 <h3>Phone Number</h3>
-                <Field style={{"borderRadius": "10px"}} type="phoneNum" name="phoneNum" />
+                <Field as={TextField} style={{"borderRadius": "10px"}} type="phoneNum" name="phoneNum" />
                 <h3>Message</h3>
                 <Field as={TextField} style={{"borderRadius": "10px", "marginBottom": "2%"}} type="message" name="message" />
                 <ErrorMessage  name="phoneNum" component="div" />

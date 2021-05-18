@@ -9,7 +9,8 @@ import Button from "../Components/Button";
 import BaseGrid from "../Components/Bases/BaseGrid";
 import Border from "../Components/Border";
 import styled from "styled-components";
-import { getAccountInf, clearCookie, getCalendar, logout} from "../utils/axios";
+import Carousel from '../Components/LayoutComp/Carousel';
+import { getAccountInf, clearCookie, getCalendar, logout, getApps} from "../utils/axios";
 
 //Components
 import Navibar from "../Components/LayoutComp/Navibar";
@@ -21,21 +22,27 @@ grid-template-rows: 0.1fr 1.7fr 0.1fr;
 gap: 0px 0px;
 height: ${props => props.height ? props.height : "100vh"};
 `;
+
 function Dashboard() {
   const [userInfo, setUserInf] = React.useState([]);
   const [calendar, setCalendar] = React.useState([]);
+  const [apps, setApps] = React.useState([]);
   React.useEffect(() => {
     getAccountInf().then(({
       data
     }) => {
       setUserInf(data);
-      console.log(data);
+      getApps(data.name).then(dbData => {
+        setApps(dbData.data);
+        console.log(dbData.data);
+      })
     })
   }, []);
   
   getCalendar('primary').then(data => {
     console.log(data);
   })
+  console.log(apps);
   return (
     <div className="App">
       <Grid>
@@ -65,6 +72,7 @@ function Dashboard() {
               <h2 style={{"backgroundColor": "#cc7464", "border": "groove #914133"}}>Your Appointments!
               </h2>
             </div>
+            <Carousel />
             <div style={{"backgroundColor": "#ba8e8a"}}>
               <h2 style={{"margin": "auto", "backgroundColor": "#cc7464", "border": "groove #914133"}}>Schedule an Appointment!</h2>
             </div>
