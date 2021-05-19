@@ -1,0 +1,7 @@
+
+
+@media all and (max-width: 480px) {
+  .CarouselCell {
+    width: 100%;
+}
+}
