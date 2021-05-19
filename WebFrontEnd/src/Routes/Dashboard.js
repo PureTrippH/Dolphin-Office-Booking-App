@@ -18,9 +18,9 @@ import Body from "../Components/LayoutComp/Body";
 
 const Grid = styled.div`
 display: grid;
-grid-template-rows: 0.1fr 1.7fr 0.1fr;
+grid-template-rows: 0.1fr 1.6fr 0.1fr;
 gap: 0px 0px;
-height: ${props => props.height ? props.height : "100vh"};
+height: 100vh;
 `;
 
 function Dashboard() {
@@ -69,10 +69,10 @@ function Dashboard() {
             <img style={{"borderRadius": "25%", "border": "groove #914133"}} src={userInfo.pic_url} />
             </div>
             <div>
-              <h2 style={{"backgroundColor": "#cc7464", "border": "groove #914133"}}>Your Appointments!
+              <h2 style={{"margin": "auto", "backgroundColor": "#cc7464", "border": "groove #914133"}}>Your Appointments!
               </h2>
+              <Carousel content={apps} />
             </div>
-            <Carousel />
             <div style={{"backgroundColor": "#ba8e8a"}}>
               <h2 style={{"margin": "auto", "backgroundColor": "#cc7464", "border": "groove #914133"}}>Schedule an Appointment!</h2>
             </div>
