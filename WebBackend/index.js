@@ -12,7 +12,9 @@ const cookieSession = require('cookie-session');
 const mongoose = require('mongoose');
 const twilio = require('twilio');
 
-var bodyParser = require('body-parser');
+const refreshDb = require('./refreshDb');
+
+const bodyParser = require('body-parser');
 
 //keys
 const credentials = require('./calendarkeys.json');
@@ -22,6 +24,7 @@ const twilioClient = new twilio(settings.accountSid, settings.authToken);
 
 let strat = require('./strategies/google');
 
+refreshDb.checkDates(twilioClient); 
 mongo.init();
 //Middleware Initialization
 app.use( cors({
@@ -61,6 +64,10 @@ app.listen(3001 , () => {
     console.log(`app listening on port 3001`)
 })
 
+app.get('/date', (req, res) => {
+    res.send(new Date());
+})
+
 app.get('/calendar', isLoggedIn, (req, res) => passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/calendar.readonly'] }));
 
 app.get('/failed', isLoggedIn, (req, res) => res.send(`You failed to log in`));
@@ -94,6 +101,7 @@ app.get('/calendar/add/:id/:newTimeAndDate/:name', (req, res) => {
         text: `Automated College Appointment - By ${req.params.name}`
     })
 }) 
+
 
 app.post('/calendarInfo/writeReq', isLoggedIn, async (req, res) => {
     let postBody = req.body;
@@ -154,8 +162,8 @@ app.get('/calendar/:id', isLoggedIn, (req, res) => {
 //Logout of Passport Session
 app.get('/logout', isLoggedIn, (req, res) => {
     req.session = null;
+    res.redirect('/google');
     req.logout();
-    res.redirect('h');
 })
 // Authenticate with Passport OAuth
 app.get("/google", passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/calendar.events', 'https://www.googleapis.com/auth/calendar.readonly', 'profile', 'email'] }));

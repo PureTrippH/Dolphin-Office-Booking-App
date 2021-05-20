@@ -54,7 +54,7 @@ function Dashboard() {
           "margin": "0 auto"
         }}src={Dolphin}/>
       </Navibar>
-        <div style={{"paddingRight": "5%", "paddingLeft": "5%", "backgroundColor": "#f7c3c1"}}>
+        <div style={{"boxShadow": "5px 10px #888888", "paddingRight": "5%", "paddingLeft": "5%", "backgroundColor": "#f7c3c1"}}>
         <div style={{
           "backgroundColor": "#f0b1ad",
           "minHeight": "100%",
@@ -71,16 +71,17 @@ function Dashboard() {
             <div>
               <h2 style={{"margin": "auto", "backgroundColor": "#cc7464", "border": "groove #914133"}}>Your Appointments!
               </h2>
-              <Carousel content={apps} />
+              {apps.length == 0 ? null : <Carousel content={apps} />
+              }
+              
             </div>
             <div style={{"backgroundColor": "#ba8e8a"}}>
               <h2 style={{"margin": "auto", "backgroundColor": "#cc7464", "border": "groove #914133"}}>Schedule an Appointment!</h2>
             </div>
-            <ScheduleForm name={userInfo.name} email={userInfo.email}></ScheduleForm>
+            <ScheduleForm style={{"boxShadow": "0 0 0 15px hsl(0, 0%, 90%)"}} name={userInfo.name} email={userInfo.email}></ScheduleForm>
           </div>
           </div>
-      <div style={{"minHeight": "100%", "border": "inset #db7972", "backgroundColor": "#d47572"}}>
-
+      <div style={{"minHeight": "100%", "maxHeight": "100%", "border": "inset #db7972", "backgroundColor": "#d47572"}}>
       </div>
       </Grid>
     </div>

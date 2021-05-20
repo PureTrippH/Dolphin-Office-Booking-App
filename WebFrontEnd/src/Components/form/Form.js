@@ -3,7 +3,10 @@ import { Formik } from 'formik';
 import {Form, Field, ErrorMessage } from 'formik';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
+import Alert from 'react-bootstrap/Alert';
 import { writeToDB } from '../../utils/axios';
+
+import Popup from '../LayoutComp/Popup';
 
 const ScheduleForm = (props) => {
     
@@ -13,7 +16,11 @@ const ScheduleForm = (props) => {
             validate={values => {
                 const errors = {};
                 if (!values.date) {
-                errors.date = 'Required';
+                errors.date = (
+                    <Alert variant='danger'>
+                        Required Field!
+                    </Alert>
+                )
                 }
                 return errors;
             }}
@@ -23,6 +30,9 @@ const ScheduleForm = (props) => {
                 console.log(props);
                 writeToDB(props.email, values.phoneNum, values.date, values.message, props.name);
                 }, 400);
+                return (
+                    <Popup><h1>test</h1></Popup>
+                )
             }}
         >
             {({ isSubmitting }) => (
