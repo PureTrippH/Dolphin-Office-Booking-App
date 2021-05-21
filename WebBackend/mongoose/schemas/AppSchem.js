@@ -11,6 +11,7 @@ const appSchema = mongoose.Schema({
     Message: String,
     Name: String,
     Status: String,
+    EndTime: Date,
 })
 
 module.exports = mongoose.model("Appointment", appSchema, 'appointments');

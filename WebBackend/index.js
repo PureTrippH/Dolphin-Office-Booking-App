@@ -3,7 +3,7 @@ const app = express();
 const mongo = require('./mongoose/mongo');
 const fetch = require('node-fetch');
 const { google } = require('googleapis');
-const { parseISO, format, addWeeks, addDays } = require('date-fns');
+const { parseISO, format, addWeeks, addDays, addMinutes } = require('date-fns');
 const appointSchema = require('./mongoose/schemas/AppSchem');
 //MiddleWare
 const passport = require('passport');
@@ -108,6 +108,7 @@ app.post('/calendarInfo/writeReq', isLoggedIn, async (req, res) => {
     if(!postBody) return res.send({message: `The POST Request Body is Empty. Please fill it
     with Email, PhoneNumber, Date, Message, and Name`});
     console.log(postBody);
+    let endTime = addMinutes(parseISO(postBody.Date), postBody.Duration); 
     const appointment = new appointSchema({
         _id: mongoose.Types.ObjectId(),
         Email: postBody.Email,
@@ -115,14 +116,15 @@ app.post('/calendarInfo/writeReq', isLoggedIn, async (req, res) => {
         Date: postBody.Date,
         Message: postBody.Message,
         Name: postBody.Name,
-        Status: "pending"
+        Status: "pending",
+        EndTime: endTime
       });
       appointment.save().then(results => {
         if(results) {
           /*  twilioClient.messages.create({
                 body: `Hello ${postBody.Name}!
 You have successfully made an appointment with the CHC College Counseling Office on: 
-${format(parseISO(postBody.Date), "MM/dd/yyyy 'at' HH:mm")}! 
+${format(parseISO(postBody.Date), "MM/dd/yyyy 'at' hh:mmaaaaa'm")}! 
 To See Your Appointment Details, go to the website!`,
                 to: `+1${postBody.PhoneNumber}`,
                 from: "+16109917922"

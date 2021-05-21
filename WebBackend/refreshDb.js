@@ -15,6 +15,7 @@ exports.checkDates = async() => {
     })
     console.log(res);
     res.forEach(async entry => {
+        /*
         twilioClient.messages.create({
             body: `Hello ${entry.Name}!
 Your appointment with the CHC College Counseling Office is in 10 minutes! 
@@ -22,6 +23,7 @@ Please go to the College Counseling Room for Your Meeting with a Counselor.`,
             to: `+1${entry.PhoneNumber}`,
             from: "+16109917922"
         });
+        */
         await appointSchema.deleteMany({
             Date: entry.Date,
             Email: entry.Email
