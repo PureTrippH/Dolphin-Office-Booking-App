@@ -13,7 +13,7 @@ import Popup from '../LayoutComp/Popup';
 
 const ScheduleForm = (props) => {
     const [calendar, setCalendar] = React.useState([]);
-
+    const [valid, setValid] = React.useState(false);
     React.useEffect(() => {
           getCalendar('oxygenatemc@gmail.com').then(calData => {
             if(calData.data.data) {
@@ -24,7 +24,7 @@ const ScheduleForm = (props) => {
       }, []);
     return(
         <Formik
-            initialValues={{ date: '', phoneNum: '', message: '', duration: '10'}}
+            initialValues={{ date: '', phoneNum: '', message: '', duration: 'SelectOne'}}
             validate={values => {
                 const errors = {};
                 let sched = parseISO(values.date);
@@ -32,12 +32,14 @@ const ScheduleForm = (props) => {
                     let startTime = parseISO(values.date) >= parseISO(date.start.dateTime) && parseISO(values.date) <= parseISO(date.end.dateTime);
                     let endTime = addMinutes(parseISO(values.date), parseInt(values.duration)) >= parseISO(date.start.dateTime) && addMinutes(parseISO(values.date), parseInt(values.duration)) <= parseISO(date.end.dateTime);
                     if(startTime) {
+                        setValid(false);
                         errors.date = (
                             <Alert variant='danger'>
                                 Start Date and Time Taken! Find Another Time, Day, or Duration!
                             </Alert>
                         )
                     } else if(endTime) {
+                        setValid(false);
                         errors.date = (
                             <Alert variant='danger'>
                                 End Date and Time Taken! Find Another Time, Day, or Duration!
@@ -45,20 +47,34 @@ const ScheduleForm = (props) => {
                         )
                     }
                     else if(parseISO(values.date) >= addDays(parseISO(values.date), 21)) {
+                        setValid(false);
                         errors.date = (
                             <Alert variant='danger'>
                                 Please Choose A Time Within 3 Weeks From Now!
                             </Alert>
                         )
+                    } else {
+                        setValid(true);
                     }
                 })
-                if (!values.date) {
-                errors.date = (
-                    <Alert variant='danger'>
-                        Required Field!
-                    </Alert>
-                )
+                console.log(values.duration);
+                if(values.duration == "SelectOne") {
+                    setValid(true);
+                    errors.duration = (
+                        <Alert variant='danger'>
+                            Required Field!
+                        </Alert>
+                    )
                 }
+                if (!values.date) {
+                    setValid(true);
+                    errors.date = (
+                        <Alert variant='danger'>
+                            Required Field!
+                        </Alert>
+                    )
+                }
+                
                 
                 return errors;
             }}
@@ -68,6 +84,8 @@ const ScheduleForm = (props) => {
                 console.log(props);
                 writeToDB(props.email, values.phoneNum, values.date, values.message, props.name, values.duration);
                 }, 400);
+                setValid(false);
+                window.location.reload();
                 return (
                     <Popup><h1>test</h1></Popup>
                 )
@@ -75,23 +93,26 @@ const ScheduleForm = (props) => {
         >
             {({ isSubmitting }) => (
                 <Form style={{"backgroundColor": "#f2c1bd","padding": "2%", "margin": "5%", "border": "groove #e6b7b3 3px"}}>
-                <h3>Appointment Date</h3>
-                <Field as={TextField} style={{"borderRadius": "10px"}} type="datetime-local" name="date" />
+                <link href="https://fonts.googleapis.com/css2?family=Fjalla+One&display=swap" rel="stylesheet" />
+                <h3 style={{"fontFamily": "Fjalla One"}}>Appointment Date</h3>
+                <Field as={TextField} style={{"borderRadius": "10px", "marginBottom": "1%"}} type="datetime-local" name="date" />
                 <ErrorMessage name="date" component="div" />
-                <h3>Phone Number</h3>
-                <Field as={TextField} style={{"borderRadius": "10px"}} type="phoneNum" name="phoneNum" />
-                <h3>Duration</h3>
-                <Field as={Select} name="duration" type="duration">
-                    <MenuItem value="10">10 Minutes</MenuItem>
-                    <MenuItem value="20">20 Minutes</MenuItem>
-                    <MenuItem value="30">30 Minutes</MenuItem>
-                    <MenuItem value="40">40 Minutes</MenuItem>
-                    <MenuItem value="60">60 Minutes</MenuItem>
+                <h3 style={{"fontFamily": "Fjalla One"}}>Phone Number</h3>
+                <Field as={TextField} style={{"borderRadius": "10px", "marginBottom": "1%"}} type="phoneNum" name="phoneNum" />
+                <h3 style={{"fontFamily": "Fjalla One"}}>Duration</h3>
+                <Field style={{"fontFamily": "Fjalla One", "marginBottom": "1%"}} as={Select} name="duration" type="duration">
+                    <MenuItem style={{"fontFamily": "Fjalla One"}} value="SelectOne">Select One</MenuItem>
+                    <MenuItem style={{"fontFamily": "Fjalla One"}} value="10">10 Minutes</MenuItem>
+                    <MenuItem style={{"fontFamily": "Fjalla One"}} value="20">20 Minutes</MenuItem>
+                    <MenuItem style={{"fontFamily": "Fjalla One"}} value="30">30 Minutes</MenuItem>
+                    <MenuItem style={{"fontFamily": "Fjalla One"}} value="40">40 Minutes</MenuItem>
+                    <MenuItem style={{"fontFamily": "Fjalla One"}} value="60">60 Minutes</MenuItem>
                 </Field>
-                <h3>Message</h3>
-                <Field as={TextField} style={{"borderRadius": "10px", "marginBottom": "2%"}} type="message" name="message" />
-                <ErrorMessage  name="phoneNum" component="div" />
-                <Button style={{"margin": "auto"}} color="error" variant="contained" fullWidth type="submit" disabled={isSubmitting}>
+                <ErrorMessage style={{"fontFamily": "Fjalla One"}}  name="duration" component="div" />
+                <h3 style={{"fontFamily": "Fjalla One"}}>Message</h3>
+                <Field style={{"fontFamily": "Fjalla One"}} as={TextField} style={{"borderRadius": "10px", "marginBottom": "2%"}} type="message" name="message" />
+                
+                <Button  style={{"margin": "auto"}} color="error" variant="contained" fullWidth type="submit" disabled={!valid}>
                     Submit
                 </Button>
                 </Form>

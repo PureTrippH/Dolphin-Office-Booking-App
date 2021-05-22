@@ -17,13 +17,15 @@ const BaseCarousel = (props) => {
     
     if(content) {
     contentMap = content.map((newContent) =>
-	<Carousel.Item>
+	<Carousel.Item interval={2000}>
 	<div className="CarouselCell" style={{"backgroundColor": "#f59995", "borderRadius": "5px", "border": "groove #914133", "width": "auto"}}>
-		<h3 style={{"fontSize": "1em"}}>Appointment</h3>
+		<link href="https://fonts.googleapis.com/css2?family=Fjalla+One&display=swap" rel="stylesheet" />
+		<link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Fjalla+One&display=swap" rel="stylesheet" />
+		<h1 style={{"fontFamily": "Alfa Slab One","fontSize": "1.5em"}}>Appointment</h1>
 		<Border />
-		<h5 style={{"fontSize": "1em"}}>{format(parseISO(newContent.Date), "MM-dd-yyyy 'At' hh:mma")}</h5>
-		<h4 style={{"fontSize": "1em", "wordWrap": "inherit", "hyphens": "auto"}}>Message: {newContent.Message}</h4>
-		<h4 style={{"fontSize": "1em"}}>Status: {newContent.Status}</h4>
+		<h5 style={{"fontFamily": "Fjalla One", "fontSize": "1em"}}>{format(parseISO(newContent.Date), "MM-dd-yyyy 'At' hh:mma")}</h5>
+		<h4 style={{"fontFamily": "Fjalla One", "fontSize": "1em", "wordWrap": "inherit", "hyphens": "auto"}}>Message: {newContent.Message}</h4>
+		<h4 style={{"fontFamily": "Fjalla One", "fontSize": "1em"}}>Status: {newContent.Status}</h4>
 		{(newContent.Status == "Modified") ? 
 		<Button style={{"marginBottom": "2.5%"}} color="error" variant="contained" type="submit">View Edits</Button>: null
 		}
