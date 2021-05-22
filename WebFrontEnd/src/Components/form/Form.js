@@ -6,16 +6,35 @@ import TextField from '@material-ui/core/TextField';
 import { MenuItem, Select } from '@material-ui/core';
 import Alert from 'react-bootstrap/Alert';
 import { writeToDB } from '../../utils/axios';
+import { getCalendar} from "../../utils/axios";
+import { parseISO } from "date-fns"
 
 import Popup from '../LayoutComp/Popup';
 
 const ScheduleForm = (props) => {
-    
+    const [calendar, setCalendar] = React.useState([]);
+
+    React.useEffect(() => {
+          getCalendar('oxygenatemc@gmail.com').then(calData => {
+            if(calData) {
+              setCalendar(calData.data.data.items);
+            }
+        })
+      }, []);
     return(
         <Formik
-            initialValues={{ date: '', phoneNum: '', message: ''}}
+            initialValues={{ date: '', phoneNum: '', message: '', duration: '10'}}
             validate={values => {
                 const errors = {};
+                calendar.forEach(date => {
+                    if( parseISO(values.date) > parseISO(date.start.dateTime) && parseISO(values.date) < parseISO(date.end.dateTime)) {
+                        errors.date = (
+                            <Alert variant='danger'>
+                                Date and Time Taken! Find Another Time or Day!
+                            </Alert>
+                        )
+                    }
+                })
                 if (!values.date) {
                 errors.date = (
                     <Alert variant='danger'>
@@ -23,11 +42,7 @@ const ScheduleForm = (props) => {
                     </Alert>
                 )
                 }
-                errors.date = (
-                    <Alert variant='danger'>
-                        Date and Time Taken! Find Another Time or Day!
-                    </Alert>
-                )
+                
                 return errors;
             }}
             onSubmit={(values, { setSubmitting }) => {

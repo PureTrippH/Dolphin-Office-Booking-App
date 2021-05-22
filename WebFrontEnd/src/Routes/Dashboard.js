@@ -27,6 +27,7 @@ function Dashboard() {
   const [userInfo, setUserInf] = React.useState([]);
   const [calendar, setCalendar] = React.useState([]);
   const [apps, setApps] = React.useState([]);
+
   React.useEffect(() => {
     getAccountInf().then(({
       data
@@ -34,15 +35,15 @@ function Dashboard() {
       setUserInf(data);
       getApps(data.name).then(dbData => {
         setApps(dbData.data);
-        console.log(dbData.data);
+      })
+      getCalendar('oxygenatemc@gmail.com').then(calData => {
+        if(calData) {
+          setCalendar(calData.data.data.items);
+        }
       })
     })
   }, []);
-  
-  getCalendar('primary').then(data => {
-    console.log(data);
-  })
-  console.log(apps);
+
   return (
     <div className="App">
       <Grid>
@@ -63,7 +64,7 @@ function Dashboard() {
         }}>
           <div style={{"backgroundColor": "#bf5441", "border": "groove #914133", "margin": "auto"}}>
             <h1 style={{"margin": "5px"}}>
-              Hello! {userInfo.name}
+               Hello! {}
               <Border/>
             </h1>
             <img style={{"borderRadius": "25%", "border": "groove #914133"}} src={userInfo.pic_url} />

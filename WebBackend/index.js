@@ -3,7 +3,7 @@ const app = express();
 const mongo = require('./mongoose/mongo');
 const fetch = require('node-fetch');
 const { google } = require('googleapis');
-const { parseISO, format, addWeeks, addDays, addMinutes } = require('date-fns');
+const { parseISO, format, addWeeks, addDays, isWithinInterval } = require('date-fns');
 const appointSchema = require('./mongoose/schemas/AppSchem');
 //MiddleWare
 const passport = require('passport');
@@ -144,17 +144,13 @@ app.get('/calendar/:id', isLoggedIn, (req, res) => {
     });
     let calendar = google.calendar({version: 'v3', auth: oauth2Client});
     //Get Calendar
-    calendar.calendars.get({
-        calendarId: id
-    },
-    /*
     calendar.events.list({
         calendarId: id,
         timeMax: addDays(new Date(), 7).toISOString(), // Let's get events for one week
         timeMin: addDays(new Date(), 0).toISOString(),
         singleEvents: true,
         orderBy: 'startTime',
-    },*/ (err, content) => {
+    }, (err, content) => {
         //PROBLEM: Calendar Not Found.
         if(err) res.send({message: `${err}. Can not access ${req.params.id}'s Calendar`});
         else res.send(content);
