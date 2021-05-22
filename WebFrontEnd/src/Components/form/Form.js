@@ -7,7 +7,7 @@ import { MenuItem, Select } from '@material-ui/core';
 import Alert from 'react-bootstrap/Alert';
 import { writeToDB } from '../../utils/axios';
 import { getCalendar} from "../../utils/axios";
-import { parseISO } from "date-fns"
+import { parseISO, addMinutes, addDays } from "date-fns"
 
 import Popup from '../LayoutComp/Popup';
 
@@ -16,8 +16,9 @@ const ScheduleForm = (props) => {
 
     React.useEffect(() => {
           getCalendar('oxygenatemc@gmail.com').then(calData => {
-            if(calData) {
-              setCalendar(calData.data.data.items);
+            if(calData.data.data) {
+                console.log(calData);
+                setCalendar(calData.data.data.items);
             }
         })
       }, []);
@@ -26,11 +27,27 @@ const ScheduleForm = (props) => {
             initialValues={{ date: '', phoneNum: '', message: '', duration: '10'}}
             validate={values => {
                 const errors = {};
+                let sched = parseISO(values.date);
                 calendar.forEach(date => {
-                    if( parseISO(values.date) > parseISO(date.start.dateTime) && parseISO(values.date) < parseISO(date.end.dateTime)) {
+                    let startTime = parseISO(values.date) >= parseISO(date.start.dateTime) && parseISO(values.date) <= parseISO(date.end.dateTime);
+                    let endTime = addMinutes(parseISO(values.date), parseInt(values.duration)) >= parseISO(date.start.dateTime) && addMinutes(parseISO(values.date), parseInt(values.duration)) <= parseISO(date.end.dateTime);
+                    if(startTime) {
                         errors.date = (
                             <Alert variant='danger'>
-                                Date and Time Taken! Find Another Time or Day!
+                                Start Date and Time Taken! Find Another Time, Day, or Duration!
+                            </Alert>
+                        )
+                    } else if(endTime) {
+                        errors.date = (
+                            <Alert variant='danger'>
+                                End Date and Time Taken! Find Another Time, Day, or Duration!
+                            </Alert>
+                        )
+                    }
+                    else if(parseISO(values.date) >= addDays(parseISO(values.date), 21)) {
+                        errors.date = (
+                            <Alert variant='danger'>
+                                Please Choose A Time Within 3 Weeks From Now!
                             </Alert>
                         )
                     }

@@ -3,7 +3,7 @@ const app = express();
 const mongo = require('./mongoose/mongo');
 const fetch = require('node-fetch');
 const { google } = require('googleapis');
-const { parseISO, format, addWeeks, addDays, isWithinInterval } = require('date-fns');
+const { parseISO, format, addWeeks, addDays, isWithinInterval, addMinutes } = require('date-fns');
 const appointSchema = require('./mongoose/schemas/AppSchem');
 //MiddleWare
 const passport = require('passport');
@@ -108,7 +108,14 @@ app.post('/calendarInfo/writeReq', isLoggedIn, async (req, res) => {
     if(!postBody) return res.send({message: `The POST Request Body is Empty. Please fill it
     with Email, PhoneNumber, Date, Message, and Name`});
     console.log(postBody);
-    let endTime = addMinutes(parseISO(postBody.Date), postBody.Duration); 
+    let endTime = addMinutes(parseISO(postBody.Date), parseInt(postBody.Duration)); 
+    const oauth2Client = new google.auth.OAuth2()
+    oauth2Client.setCredentials({
+        'access_token': req.user.accessToken,
+    });
+    let calendar = google.calendar({version: 'v3', auth: oauth2Client});
+    //Get Calendar
+    
     const appointment = new appointSchema({
         _id: mongoose.Types.ObjectId(),
         Email: postBody.Email,
@@ -121,6 +128,31 @@ app.post('/calendarInfo/writeReq', isLoggedIn, async (req, res) => {
       });
       appointment.save().then(results => {
         if(results) {
+            console.log(endTime.toISOString());
+            console.log(parseISO(postBody.Date).toISOString());
+            calendar.events.inse
+            calendar.events.insert({
+                calendarId: 'primary',
+                requestBody: {
+                    description: `College Counseling: ${postBody.Message}`,
+                start: {
+                    dateTime: parseISO(postBody.Date).toISOString(),
+                    timeZone: 'America/New_York',
+                },
+                end: {
+                    dateTime: endTime.toISOString(),
+                    timeZone: 'America/New_York'
+                },
+                
+                'reminders': {
+                    'useDefault': false,
+                    'overrides': [
+                      {'method': 'email', 'minutes': 24 * 60},
+                      {'method': 'popup', 'minutes': 10}
+                    ]
+                  },
+                }
+            });
           /*  twilioClient.messages.create({
                 body: `Hello ${postBody.Name}!
 You have successfully made an appointment with the CHC College Counseling Office on: 

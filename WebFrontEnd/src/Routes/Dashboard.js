@@ -25,7 +25,7 @@ height: 100vh;
 
 function Dashboard() {
   const [userInfo, setUserInf] = React.useState([]);
-  const [calendar, setCalendar] = React.useState([]);
+
   const [apps, setApps] = React.useState([]);
 
   React.useEffect(() => {
@@ -35,11 +35,6 @@ function Dashboard() {
       setUserInf(data);
       getApps(data.name).then(dbData => {
         setApps(dbData.data);
-      })
-      getCalendar('oxygenatemc@gmail.com').then(calData => {
-        if(calData) {
-          setCalendar(calData.data.data.items);
-        }
       })
     })
   }, []);
