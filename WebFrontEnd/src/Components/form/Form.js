@@ -92,7 +92,7 @@ const ScheduleForm = (props) => {
             }}
         >
             {({ isSubmitting }) => (
-                <Form style={{"backgroundColor": "#f2c1bd","padding": "2%", "margin": "5%", "border": "groove #e6b7b3 3px"}}>
+                <Form style={{"backgroundColor": "#f2c1bd","padding": `"2%"`, "margin": "5%", "border": "groove #e6b7b3 3px"}}>
                 <link href="https://fonts.googleapis.com/css2?family=Fjalla+One&display=swap" rel="stylesheet" />
                 <h3 style={{"fontFamily": "Fjalla One"}}>Appointment Date</h3>
                 <Field as={TextField} style={{"borderRadius": "10px", "marginBottom": "1%"}} type="datetime-local" name="date" />

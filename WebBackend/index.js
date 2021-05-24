@@ -44,7 +44,7 @@ app.use(cookieSession({
 //Auth Function
 const isLoggedIn = (req, res, next) => {
     if(!req.user) {
-        return res.status(401).send("NOpe");
+        return res.status(401).send(false);
         next()
     } else {
         next();
@@ -55,7 +55,9 @@ const isLoggedIn = (req, res, next) => {
 app.use(passport.initialize());
 app.use(passport.session());
 
-
+app.get("/loggedIn", isLoggedIn, (req, res) => {
+        return res.send("true");
+})
 
 app.get("/", (req, res) => {
     res.send("Hey Hey");

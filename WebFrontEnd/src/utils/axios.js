@@ -14,6 +14,11 @@ export const getCalendar = async(calID) => {
         { withCredentials: true });
 }
 
+export const isLoggedIn = async() => {
+        return axios.get(`http://localhost:3001/loggedIn`, 
+        { withCredentials: true });
+}
+
 export const writeToDB = async(email, phoneNum, date, message, name, duration) => {
         return axios.post(`http://localhost:3001/calendarInfo/writeReq`, {
                 "Email": email,

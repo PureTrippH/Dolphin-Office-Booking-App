@@ -23,6 +23,9 @@ const BaseCarousel = (props) => {
 	const toggleButton = (date, message, status) => {
 		setPopup(!popup);
 		setControlOp(!controlOp);
+		setData({message: message, date: date})
+		if(myInterval == 2000) setInterval(100000000);
+		else setInterval(2000);
 	}
     
     if(content) {
@@ -36,8 +39,8 @@ const BaseCarousel = (props) => {
 		<h5 style={{"fontFamily": "Fjalla One", "fontSize": "1em"}}>{format(parseISO(newContent.Date), "MM-dd-yyyy 'At' hh:mma")}</h5>
 		<h4 style={{"fontFamily": "Fjalla One", "fontSize": "1em", "wordWrap": "inherit", "hyphens": "auto"}}>Message: {newContent.Message}</h4>
 		<h4 style={{"fontFamily": "Fjalla One", "fontSize": "1em"}}>Status: {newContent.Status}</h4>
-		{(newContent.Status == "Modified") ? 
-		<Button onClick={toggleButton} style={{"marginBottom": "2.5%"}} color="error" variant="contained" type="submit">View Edits</Button>: null
+		{(newContent.Status == "Modified") ? (() => setControlOp(false),
+		<Button onClick={() => toggleButton(format(parseISO(newContent.Date), "MM-dd-yyyy 'At' hh:mma"), newContent.Message)} style={{"marginBottom": "2.5%"}} color="error" variant="contained" type="submit">View Edits</Button>) : null
 		}
 	</div> 
 	</Carousel.Item>
@@ -46,10 +49,12 @@ const BaseCarousel = (props) => {
     return (
 		<div>
 			<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css"/>
-			<Carousel controls={controlOp} indicators={controlOp} interval={2000} keyboard={false} pauseOnHover={true}>
+			<Carousel controls={controlOp} indicators={controlOp} interval={myInterval} keyboard={false} pauseOnHover={true}>
 				{contentMap}
 			</Carousel>
-			{popup ? (<Popup date={userData.date} message={userData.message}></Popup>) : null}
+			{popup ? (
+				<div>
+			<Popup date={userData.date} message={userData.message} /> </div>) : null}
 		</div>
     )
 }
