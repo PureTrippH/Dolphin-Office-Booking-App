@@ -3,6 +3,7 @@ import Border from "../Border";
 import '../../Mobile.css';
 import { Icon, Button } from '@material-ui/core';
 import { format, parseISO } from 'date-fns';
+import Popup  from './Popup';
 import Carousel from 'react-bootstrap/Carousel' 
 
 
@@ -14,10 +15,19 @@ const BaseCarousel = (props) => {
 	const [currentApp, setApp] = React.useState(0);
     let content = props.content;
 	let contentMap = null;
+	const [popup, setPopup] = React.useState(false);
+	const [userData, setData] = React.useState({message: "test", date: "test"});
+	const [controlOp, setControlOp] = React.useState(true);
+	const [myInterval, setInterval] = React.useState(2000);
+
+	const toggleButton = (date, message, status) => {
+		setPopup(!popup);
+		setControlOp(!controlOp);
+	}
     
     if(content) {
     contentMap = content.map((newContent) =>
-	<Carousel.Item interval={2000}>
+	<Carousel.Item>
 	<div className="CarouselCell" style={{"backgroundColor": "#f59995", "borderRadius": "5px", "border": "groove #914133", "width": "auto"}}>
 		<link href="https://fonts.googleapis.com/css2?family=Fjalla+One&display=swap" rel="stylesheet" />
 		<link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Fjalla+One&display=swap" rel="stylesheet" />
@@ -27,7 +37,7 @@ const BaseCarousel = (props) => {
 		<h4 style={{"fontFamily": "Fjalla One", "fontSize": "1em", "wordWrap": "inherit", "hyphens": "auto"}}>Message: {newContent.Message}</h4>
 		<h4 style={{"fontFamily": "Fjalla One", "fontSize": "1em"}}>Status: {newContent.Status}</h4>
 		{(newContent.Status == "Modified") ? 
-		<Button style={{"marginBottom": "2.5%"}} color="error" variant="contained" type="submit">View Edits</Button>: null
+		<Button onClick={toggleButton} style={{"marginBottom": "2.5%"}} color="error" variant="contained" type="submit">View Edits</Button>: null
 		}
 	</div> 
 	</Carousel.Item>
@@ -36,11 +46,11 @@ const BaseCarousel = (props) => {
     return (
 		<div>
 			<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css"/>
-			<Carousel interval={600} keyboard={false} pauseOnHover={true}>
+			<Carousel controls={controlOp} indicators={controlOp} interval={2000} keyboard={false} pauseOnHover={true}>
 				{contentMap}
 			</Carousel>
+			{popup ? (<Popup date={userData.date} message={userData.message}></Popup>) : null}
 		</div>
     )
 }
-export default BaseCarousel;
-		
+export default BaseCarousel;	

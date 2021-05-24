@@ -82,13 +82,13 @@ const ScheduleForm = (props) => {
                 setTimeout(() => {
                 let vals = JSON.stringify(values, null, 2);
                 console.log(props);
-                writeToDB(props.email, values.phoneNum, values.date, values.message, props.name, values.duration);
-                }, 400);
-                setValid(false);
-                window.location.reload();
                 return (
                     <Popup><h1>test</h1></Popup>
                 )
+                writeToDB(props.email, values.phoneNum, values.date, values.message, props.name, values.duration);
+                }, 400);
+                setValid(false);
+                //window.location.reload();
             }}
         >
             {({ isSubmitting }) => (
