@@ -21,6 +21,7 @@ const BaseCarousel = (props) => {
 	const [myInterval, setInterval] = React.useState(2000);
 
 	const toggleButton = (date, message, status) => {
+		console.log("Toggling");
 		setPopup(!popup);
 		setControlOp(!controlOp);
 		setData({message: message, date: date})
@@ -54,7 +55,7 @@ const BaseCarousel = (props) => {
 			</Carousel>
 			{popup ? (
 				<div>
-			<Popup date={userData.date} message={userData.message} /> </div>) : null}
+			<Popup changeFunc={toggleButton} date={userData.date} message={userData.message} /> </div>) : null}
 		</div>
     )
 }

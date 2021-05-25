@@ -79,6 +79,9 @@ const ScheduleForm = (props) => {
                 return errors;
             }}
             onSubmit={(values, { setSubmitting }) => {
+                if(props.type == "edited") {
+                    props.changeFunc("", "", "");
+                }
                 setTimeout(() => {
                 let vals = JSON.stringify(values, null, 2);
                 console.log(props);

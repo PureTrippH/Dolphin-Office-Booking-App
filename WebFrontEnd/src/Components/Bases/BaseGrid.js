@@ -19,12 +19,12 @@ width: auto;
 -webkit-background-style: cover;
 -moz-background-style: cover;
 -o-background-size: cover;
-
-@media (max-width: 499.99px)
+${props => props.noMedia ?
+"" : `@media (max-width: 499.99px)
 and (max-width: 1024px) {
     grid-template-columns: 100%;
     padding: 0px;
-}
+}`}
 
 `
 export default BaseGrid;
