@@ -66,7 +66,7 @@ function Dashboard() {
             <img style={{"borderRadius": "25%", "border": "groove #914133", "boxShadow": "rgba(0, 0, 0, 0.35) 0px 5px 15px"}} src={userInfo.pic_url} />
             </div>
             <Header text="Your Appointments">
-              {apps.length == 0 ? null : <Carousel content={apps} />
+              {apps.length == 0 ? null : <Carousel email={userInfo.email} name={userInfo.name} content={apps} />
               }
             </Header>
             <Header text="Schedule an Appointment!" />

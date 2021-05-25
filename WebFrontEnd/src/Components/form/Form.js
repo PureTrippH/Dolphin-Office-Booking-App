@@ -5,7 +5,7 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import { MenuItem, Select } from '@material-ui/core';
 import Alert from 'react-bootstrap/Alert';
-import { writeToDB } from '../../utils/axios';
+import { writeToDB, overwriteDB } from '../../utils/axios';
 import { getCalendar} from "../../utils/axios";
 import { parseISO, addMinutes, addDays } from "date-fns"
 
@@ -80,18 +80,17 @@ const ScheduleForm = (props) => {
             }}
             onSubmit={(values, { setSubmitting }) => {
                 if(props.type == "edited") {
+                    overwriteDB(props.email, values.phoneNum, values.date, values.message, props.name, values.duration, props.prevDate, props.prevEndTime);
                     props.changeFunc("", "", "");
+                    return window.location.reload();
                 }
                 setTimeout(() => {
                 let vals = JSON.stringify(values, null, 2);
                 console.log(props);
-                return (
-                    <Popup><h1>test</h1></Popup>
-                )
                 writeToDB(props.email, values.phoneNum, values.date, values.message, props.name, values.duration);
                 }, 400);
                 setValid(false);
-                //window.location.reload();
+                return window.location.reload();
             }}
         >
             {({ isSubmitting }) => (

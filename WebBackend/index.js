@@ -104,6 +104,30 @@ app.get('/calendar/add/:id/:newTimeAndDate/:name', (req, res) => {
     })
 }) 
 
+app.post('/calendarInfo/writeReq/editReq', isLoggedIn, async (req, res) => {
+    let postBody = req.body;
+    if(!postBody) return res.send({message: `The POST Request Body is Empty. Please fill it
+    with Email, PhoneNumber, Date, Message, and Name`});
+    let endTime = addMinutes(parseISO(postBody.Date), parseInt(postBody.Duration)); 
+    console.log(parseISO(postBody.PrevDate));
+    console.log(postBody.PrevEndTime);
+    await appointSchema.findOneAndUpdate({
+        Date: postBody.PrevDate,
+        EndTime: postBody.PrevEndTime
+    }, {
+        Email: postBody.Email,
+        PhoneNumber: postBody.PhoneNumber,
+        Date: postBody.Date,
+        Message: postBody.Message,
+        Name: postBody.Name,
+        Status: "pending",
+        EndTime: endTime,
+        HasNotified: false
+    }).then(results => {
+        console.log(results)
+    });
+});
+
 
 app.post('/calendarInfo/writeReq', isLoggedIn, async (req, res) => {
     let postBody = req.body;
@@ -126,7 +150,8 @@ app.post('/calendarInfo/writeReq', isLoggedIn, async (req, res) => {
         Message: postBody.Message,
         Name: postBody.Name,
         Status: "pending",
-        EndTime: endTime
+        EndTime: endTime,
+        HasNotified: false
       });
       appointment.save().then(results => {
         if(results) {

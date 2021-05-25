@@ -17,14 +17,15 @@ const BaseCarousel = (props) => {
 	let contentMap = null;
 	const [popup, setPopup] = React.useState(false);
 	const [userData, setData] = React.useState({message: "test", date: "test"});
+	const [date, setDate] = React.useState({startDate: "lol", endDate: "lol"});
 	const [controlOp, setControlOp] = React.useState(true);
 	const [myInterval, setInterval] = React.useState(2000);
 
-	const toggleButton = (date, message, status) => {
-		console.log("Toggling");
+	const toggleButton = (dateString, message, dateNonString, endDate) => {
+		setDate({startDate: dateNonString, endDate: endDate});
 		setPopup(!popup);
 		setControlOp(!controlOp);
-		setData({message: message, date: date})
+		setData({message: message, date: dateString})
 		if(myInterval == 2000) setInterval(100000000);
 		else setInterval(2000);
 	}
@@ -41,7 +42,7 @@ const BaseCarousel = (props) => {
 		<h4 style={{"fontFamily": "Fjalla One", "fontSize": "1em", "wordWrap": "inherit", "hyphens": "auto"}}>Message: {newContent.Message}</h4>
 		<h4 style={{"fontFamily": "Fjalla One", "fontSize": "1em"}}>Status: {newContent.Status}</h4>
 		{(newContent.Status == "Modified") ? (() => setControlOp(false),
-		<Button onClick={() => toggleButton(format(parseISO(newContent.Date), "MM-dd-yyyy 'At' hh:mma"), newContent.Message)} style={{"marginBottom": "2.5%"}} color="error" variant="contained" type="submit">View Edits</Button>) : null
+		<Button onClick={() => toggleButton(format(parseISO(newContent.Date), "MM-dd-yyyy 'At' hh:mma"), newContent.Message, newContent.Date, newContent.EndTime)} style={{"marginBottom": "2.5%"}} color="error" variant="contained" type="submit">View Edits</Button>) : null
 		}
 	</div> 
 	</Carousel.Item>
@@ -55,7 +56,7 @@ const BaseCarousel = (props) => {
 			</Carousel>
 			{popup ? (
 				<div>
-			<Popup changeFunc={toggleButton} date={userData.date} message={userData.message} /> </div>) : null}
+			<Popup email={props.email} name={props.name} changeFunc={toggleButton} date={userData.date} dateInfo={date} message={userData.message} /> </div>) : null}
 		</div>
     )
 }

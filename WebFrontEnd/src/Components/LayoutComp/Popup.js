@@ -40,7 +40,7 @@ const Popup = (props) => {
                     {isFormVisible ? <div data-aos="fade-up">
                         <BaseGrid gridTemplateColumns="10% 90%">
                         <Header text="Edit Appointment"></Header>
-                        <Form type="edited" changeFunc={props.changeFunc}style={{"position": "relative", "height": "50%", "margin": "autho"}}></Form>
+                        <Form email={props.email} name={props.name} prevEndTime={props.dateInfo.endDate} prevDate={props.dateInfo.startDate} type="edited" changeFunc={props.changeFunc} style={{"position": "relative", "height": "50%", "margin": "autho"}}></Form>
                         </BaseGrid>
                     </div> : null}
                     {!isFormVisible ? 
