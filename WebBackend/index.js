@@ -44,7 +44,7 @@ app.use(cookieSession({
 //Auth Function
 const isLoggedIn = (req, res, next) => {
     if(!req.user) {
-        return res.status(401).send(false);
+        return res.status(200).send({isAuthorized: false});
         next()
     } else {
         next();
@@ -56,7 +56,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.get("/loggedIn", isLoggedIn, (req, res) => {
-        return res.send("true");
+        return res.send({"isAuthorized":true});
 })
 
 app.get("/", (req, res) => {
@@ -218,9 +218,9 @@ app.get('/calendar/:id', isLoggedIn, (req, res) => {
 
 //Logout of Passport Session
 app.get('/logout', isLoggedIn, (req, res) => {
+    req.logout();
     req.session = null;
     res.redirect('/google');
-    req.logout();
 })
 // Authenticate with Passport OAuth
 app.get("/google", passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/calendar.events', 'https://www.googleapis.com/auth/calendar.readonly', 'profile', 'email'] }));

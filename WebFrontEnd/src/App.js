@@ -7,18 +7,38 @@ import Dashboard from "./Routes/Dashboard";
 import ProtectedRoute from "./Routes/CustomRoutes/ProtectedRoute";
 import React from 'react';
 import { isLoggedIn } from "../src/utils/axios";
+import { CircularProgress  } from '@material-ui/core';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 
 function App() {
   const [currentApp, setApp] = React.useState(0);
+  const [loading, setLoading] = React.useState(true);
+  const [authorized, setAuthorized] = React.useState(false);
+  React.useEffect(() => {
+    isLoggedIn().then(({data}) => {
+      console.log(data);
+      setAuthorized(data.isAuthorized);
+      setLoading(false);
+    })}, []);
   AOS.init();
+  console.log(authorized);
+  if(!loading) {
   return (
     <Switch>
-      <Route path="/" exact={true} component={Homepage} />
-      <ProtectedRoute path="/Dashboard" loggedIn={true} component={Dashboard} />
-    </Switch>
+    <Route path="/" exact={true} component={Homepage} />
+    <ProtectedRoute path="/Dashboard" loggedIn={authorized}>
+      <Dashboard />
+    </ProtectedRoute>
+  </Switch>
   );
+  } else {
+    return (
+      <div>
+        <CircularProgress color="secondary"/>
+      </div>
+    );
+  }
 }
 
 export default App;

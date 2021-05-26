@@ -82,15 +82,16 @@ const ScheduleForm = (props) => {
                 if(props.type == "edited") {
                     overwriteDB(props.email, values.phoneNum, values.date, values.message, props.name, values.duration, props.prevDate, props.prevEndTime);
                     props.changeFunc("", "", "");
-                    return window.location.reload();
+                    window.location.reload();
                 }
                 setTimeout(() => {
-                let vals = JSON.stringify(values, null, 2);
-                console.log(props);
-                writeToDB(props.email, values.phoneNum, values.date, values.message, props.name, values.duration);
+                    let vals = JSON.stringify(values, null, 2);
+                    console.log(props);
+                    writeToDB(props.email, values.phoneNum, values.date, values.message, props.name, values.duration);
+                    return window.location.reload();
                 }, 400);
                 setValid(false);
-                return window.location.reload();
+                
             }}
         >
             {({ isSubmitting }) => (

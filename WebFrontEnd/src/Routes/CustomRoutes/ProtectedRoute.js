@@ -1,14 +1,9 @@
 import {Switch, Route, Redirect} from 'react-router-dom';
 import { isLoggedIn } from "../../utils/axios";
-const ProtectedRoute = ({ component: Comp, loggedIn, path, ...rest }) => {
+const ProtectedRoute = (props) => {
     return (
-      <Route
-        path={path}
-        {...rest}
-        render={(props) => {
-          return loggedIn ? <Comp {...props} /> : <Redirect to="/" />;
-        }}
-      />
+      <Route render={() => {
+        return props.loggedIn ? props.children : <Redirect to='/' />}}/>
     );
   };
 export default ProtectedRoute;
