@@ -9,6 +9,7 @@ import React from 'react';
 import { isLoggedIn } from "../src/utils/axios";
 import { CircularProgress  } from '@material-ui/core';
 import AOS from 'aos';
+import LoadingPage from './Routes/ErrorPages/LoadingPage'
 import 'aos/dist/aos.css';
 
 function App() {
@@ -34,9 +35,7 @@ function App() {
   );
   } else {
     return (
-      <div>
-        <CircularProgress color="secondary"/>
-      </div>
+      <LoadingPage />
     );
   }
 }

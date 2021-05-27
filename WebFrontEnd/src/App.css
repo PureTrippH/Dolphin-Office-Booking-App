@@ -2,6 +2,10 @@ html {
   background-color: #e3beba;
 }
 
+@font-face {
+  font-family: PersonaFont;
+  src: url(./graphics/fonts/PersonaFont.ttf);
+}
 
 .App {
   text-align: center;
