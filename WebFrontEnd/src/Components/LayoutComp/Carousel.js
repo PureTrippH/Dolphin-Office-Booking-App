@@ -41,7 +41,7 @@ const BaseCarousel = (props) => {
 		<h5 style={{"fontFamily": "Fjalla One", "fontSize": "1em"}}>{format(parseISO(newContent.Date), "MM-dd-yyyy 'At' hh:mma")}</h5>
 		<h4 style={{"fontFamily": "Fjalla One", "fontSize": "1em", "wordWrap": "inherit", "hyphens": "auto"}}>Message: {newContent.Message}</h4>
 		<h4 style={{"fontFamily": "Fjalla One", "fontSize": "1em"}}>Status: {newContent.Status}</h4>
-		{(newContent.Status == "Modified") ? (() => setControlOp(false),
+		{(newContent.Status == "modified") ? (() => setControlOp(false),
 		<Button onClick={() => toggleButton(format(parseISO(newContent.Date), "MM-dd-yyyy 'At' hh:mma"), newContent.Message, newContent.Date, newContent.EndTime)} style={{"marginBottom": "2.5%"}} color="error" variant="contained" type="submit">View Edits</Button>) : null
 		}
 	</div> 

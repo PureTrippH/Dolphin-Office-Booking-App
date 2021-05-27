@@ -104,6 +104,20 @@ app.get('/calendar/add/:id/:newTimeAndDate/:name', (req, res) => {
     })
 }) 
 
+app.post('/calendarInfo/writeReq/acceptReq', isLoggedIn, async (req, res) => {
+    let postBody = req.body;
+    if(!postBody) return res.send({message: `The POST Request Body is Empty. Please fill it
+    with Email, PhoneNumber, Date, Message, and Name`});
+    await appointSchema.findOneAndUpdate({
+        Date: postBody.Date,
+        EndTime: postBody.EndTime
+    }, {
+        Status: "pending",
+    }).then(results => {
+        console.log(results)
+    });
+});
+
 app.post('/calendarInfo/writeReq/editReq', isLoggedIn, async (req, res) => {
     let postBody = req.body;
     if(!postBody) return res.send({message: `The POST Request Body is Empty. Please fill it
@@ -180,14 +194,14 @@ app.post('/calendarInfo/writeReq', isLoggedIn, async (req, res) => {
                   },
                 }
             });
-          /*  twilioClient.messages.create({
+            twilioClient.messages.create({
                 body: `Hello ${postBody.Name}!
 You have successfully made an appointment with the CHC College Counseling Office on: 
 ${format(parseISO(postBody.Date), "MM/dd/yyyy 'at' hh:mmaaaaa'm")}! 
 To See Your Appointment Details, go to the website!`,
                 to: `+1${postBody.PhoneNumber}`,
                 from: "+16109917922"
-            })    */
+            }) 
             res.sendStatus(200);
         }
     })

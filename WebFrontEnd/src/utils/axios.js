@@ -29,6 +29,15 @@ export const writeToDB = async(email, phoneNum, date, message, name, duration) =
                 "Duration": duration
         },
         { withCredentials: true });
+        
+}
+
+export const acceptReq = async(date, endDate) => {
+        return axios.post(`http://localhost:3001/calendarInfo/writeReq/acceptReq`, {
+                "Date": date,
+                "EndTime": endDate,
+        },
+        { withCredentials: true });
 }
 
 export const overwriteDB = async(email, phoneNum, date, message, name, duration, prevDate, prevEndTime) => {

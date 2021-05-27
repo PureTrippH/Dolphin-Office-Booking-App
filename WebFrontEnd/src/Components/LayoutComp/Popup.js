@@ -3,7 +3,8 @@ import { Button } from "@material-ui/core";
 import Border from "../Bases/Border"
 import Form from "../form/Form";
 import BaseGrid from "../Bases/BaseGrid";
-import Header from '../LayoutComp/Headers/Header'
+import Header from '../LayoutComp/Headers/Header';
+import { acceptReq } from '../../utils/axios';
 
 import { makeStyles } from '@material-ui/core/styles';
 const Popup = (props) => {
@@ -61,7 +62,7 @@ const Popup = (props) => {
                         <h5 style={{"fontSize": "1em"}}>Duration: 50 Minutes</h5>
                         </div>
                         <BaseGrid gap="10px">
-                            <Button onClick={() => props.changeFunc("", "", "")} variant="contained" color="primary">Accept Changes</Button>
+                            <Button onClick={() => { acceptReq(props.dateInfo.startDate, props.dateInfo.endDate); props.changeFunc("", "", "");}} variant="contained" color="primary">Accept Changes</Button>
                             <Button variant="contained" onClick={() => showForum(true)} color="secondary">Decline Changes</Button>
                         </BaseGrid>
                         </div>

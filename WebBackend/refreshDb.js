@@ -10,7 +10,7 @@ exports.checkDates = async() => {
     newDate = addMinutes(newDate, 11);
     /*Find All Declined Appointments, Send a Text, then delete from Database*/
     let detectModified = await appointSchema.find({
-        Status: "Modified"
+        Status: "modified"
     })
     detectModified.forEach(async entry => {
         if(!entry.HasNotified) {
@@ -32,7 +32,7 @@ If you can not make it, please decline the changes and submit your own date.`,
     });
     
     let declinedApps = await appointSchema.find({
-        Status: "Declined"
+        Status: "declined"
     })
 
     declinedApps.forEach(async entry => {
@@ -49,17 +49,41 @@ If you have any questions, please send us an email.`,
         });
     })
 
-    /*Find All Accepted appointment that expire, send a text
-    If none found, Delete all Expired Pending without text*/
-
     let res = await appointSchema.find({
         Date: {
             $lt: newDate
         }
     })
+
+    let accepted = await appointSchema.find({
+        Status: "accepted"
+    })
+    accepted.forEach(async entry => {
+        if(!entry.HasNotified) {
+            twilioClient.messages.create({
+                body: `Hello ${entry.Name}!
+Your Appointment for ${entry.Date} 
+has been accepted! Please get there 5-10 minutes before the appointment.
+Thank you!`,
+                to: `+1${entry.PhoneNumber}`,
+                from: "+16109917922"
+            });
+            await appointSchema.findOneAndUpdate({
+                Date: entry.Date,
+                Email: entry.Email
+            }, {
+                HasNotified: true,     
+            })
+            }
+    }) 
+
+    /*Find All Accepted appointment that expire, send a text
+    If none found, Delete all Expired Pending without text*/
+
+
     console.log(res);
     res.forEach(async entry => {
-        if(entry.Status=="Accepted") {
+        if(entry.Status.toLowerCase()=="accepted") {
         twilioClient.messages.create({
             body: `Hello ${entry.Name}!
 Your appointment with the CHC College Counseling Office is in 10 minutes! 
