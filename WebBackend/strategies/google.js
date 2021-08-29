@@ -24,7 +24,7 @@ passport.deserializeUser((sessionUser, done) => {
 passport.use(new myStrat({
     clientID: settings.client_ID,
     clientSecret: settings.client_secret,
-    callbackURL: "http://localhost:3001/google/callback",
+    callbackURL: "http://dolphinapp.me/api/google/callback",
     scope: ['profile', 'email', 'https://www.googleapis.com/auth/calendar.events', 'https://www.googleapis.com/auth/calendar.readonly']
 }, (token, tokenSecret, profile, done) => {
 

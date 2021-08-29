@@ -22,11 +22,12 @@ If you can not make it, please decline the changes and submit your own date.`,
             to: `+1${entry.PhoneNumber}`,
             from: "+16109917922"
         });
-        await appointSchema.findOneAndUpdate({
-            Date: entry.Date,
+        let test = await appointSchema.findOneAndUpdate({
             Email: entry.Email
         }, {
             HasNotified: true,     
+        }).then(res => {
+            console.log(res);
         })
         }
     });
@@ -81,7 +82,6 @@ Thank you!`,
     If none found, Delete all Expired Pending without text*/
 
 
-    console.log(res);
     res.forEach(async entry => {
         if(entry.Status.toLowerCase()=="accepted") {
         twilioClient.messages.create({

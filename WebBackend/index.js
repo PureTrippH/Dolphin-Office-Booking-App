@@ -28,7 +28,7 @@ refreshDb.checkDates(twilioClient);
 mongo.init();
 //Middleware Initialization
 app.use( cors({
-    origin: ['http://localhost:3000'],
+    origin: ['http://96.30.199.111/college', 'http://dolphinapp.me/, http://localhost:3000/, http://localhost:3000/'],
     credentials: true,
 }))
 
@@ -51,11 +51,15 @@ const isLoggedIn = (req, res, next) => {
     }
 }
 
+app.get("//googleindex.html", isLoggedIn, (req, res) => {
+    res.redirect()
+})
+
 //Initialization
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.get("/loggedIn", isLoggedIn, (req, res) => {
+app.get("//loggedIn", isLoggedIn, (req, res) => {
         return res.send({"isAuthorized":true});
 })
 
@@ -66,17 +70,17 @@ app.listen(3001 , () => {
     console.log(`app listening on port 3001`)
 })
 
-app.get('/date', (req, res) => {
+app.get('//date', (req, res) => {
     res.send(new Date());
 })
 
-app.get('/calendar', isLoggedIn, (req, res) => passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/calendar.readonly'] }));
+app.get('//calendar', isLoggedIn, (req, res) => passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/calendar.readonly'] }));
 
-app.get('/failed', isLoggedIn, (req, res) => res.send(`You failed to log in`));
+app.get('//failed', isLoggedIn, (req, res) => res.send(`You failed to log in`));
 
-app.get('/userInf', isLoggedIn, (req, res) => res.send(req.user));
+app.get('//userInf', isLoggedIn, (req, res) => res.send(req.user));
 
-app.get('/appointments/:id/', isLoggedIn, async (req, res) => {
+app.get('//appointments/:id/', isLoggedIn, async (req, res) => {
     let params = req.params.id;
     let appointments = await appointSchema.find({
         Name: params
@@ -84,13 +88,13 @@ app.get('/appointments/:id/', isLoggedIn, async (req, res) => {
     res.send(appointments);
 });
 
-app.get('/clear', isLoggedIn, (req, res) => {
+app.get('//clear', isLoggedIn, (req, res) => {
     res.clearCookie(`collegeApp`);
-    return res.redirect("http://localhost:3000/");
+    return res.redirect("http://http://96.30.199.111/");
 });
 
 //Function to get A Calendar Using the Google Calendar API
-app.get('/calendar/add/:id/:newTimeAndDate/:name', (req, res) => {
+app.get('//calendar/add/:id/:newTimeAndDate/:name', (req, res) => {
     let id = req.params.id;
     const oauth2Client = new google.auth.OAuth2()
     console.log(`Access Token: ${req.user.accesstoken}`);
@@ -104,13 +108,14 @@ app.get('/calendar/add/:id/:newTimeAndDate/:name', (req, res) => {
     })
 }) 
 
-app.post('/calendarInfo/writeReq/acceptReq', isLoggedIn, async (req, res) => {
+app.post('//calendarInfo/writeReq/acceptReq', isLoggedIn, async (req, res) => {
     let postBody = req.body;
     if(!postBody) return res.send({message: `The POST Request Body is Empty. Please fill it
     with Email, PhoneNumber, Date, Message, and Name`});
+    let trueDate = parseISO(postBody.EndTime);
+    console.log(trueDate);
     await appointSchema.findOneAndUpdate({
-        Date: postBody.Date,
-        EndTime: postBody.EndTime
+        EndTime: trueDate
     }, {
         Status: "pending",
     }).then(results => {
@@ -118,7 +123,7 @@ app.post('/calendarInfo/writeReq/acceptReq', isLoggedIn, async (req, res) => {
     });
 });
 
-app.post('/calendarInfo/writeReq/editReq', isLoggedIn, async (req, res) => {
+app.post('//calendarInfo/writeReq/editReq', isLoggedIn, async (req, res) => {
     let postBody = req.body;
     if(!postBody) return res.send({message: `The POST Request Body is Empty. Please fill it
     with Email, PhoneNumber, Date, Message, and Name`});
@@ -143,7 +148,7 @@ app.post('/calendarInfo/writeReq/editReq', isLoggedIn, async (req, res) => {
 });
 
 
-app.post('/calendarInfo/writeReq', isLoggedIn, async (req, res) => {
+app.post('//calendarInfo/writeReq', isLoggedIn, async (req, res) => {
     let postBody = req.body;
     if(!postBody) return res.send({message: `The POST Request Body is Empty. Please fill it
     with Email, PhoneNumber, Date, Message, and Name`});
@@ -172,6 +177,7 @@ app.post('/calendarInfo/writeReq', isLoggedIn, async (req, res) => {
             console.log(endTime.toISOString());
             console.log(parseISO(postBody.Date).toISOString());
             calendar.events.inse
+            /*
             calendar.events.insert({
                 calendarId: 'primary',
                 requestBody: {
@@ -194,6 +200,7 @@ app.post('/calendarInfo/writeReq', isLoggedIn, async (req, res) => {
                   },
                 }
             });
+            */
             twilioClient.messages.create({
                 body: `Hello ${postBody.Name}!
 You have successfully made an appointment with the CHC College Counseling Office on: 
@@ -207,7 +214,7 @@ To See Your Appointment Details, go to the website!`,
     })
 })
 
-app.get('/calendar/:id', isLoggedIn, (req, res) => {
+app.get('//calendar/:id', isLoggedIn, (req, res) => {
     let id = req.params.id;
     const oauth2Client = new google.auth.OAuth2()
     console.log(req.user);
@@ -231,16 +238,16 @@ app.get('/calendar/:id', isLoggedIn, (req, res) => {
 })
 
 //Logout of Passport Session
-app.get('/logout', isLoggedIn, (req, res) => {
+app.get('//logout', isLoggedIn, (req, res) => {
     req.logout();
     req.session = null;
     res.redirect('/google');
 })
 // Authenticate with Passport OAuth
-app.get("/google", passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/calendar.events', 'https://www.googleapis.com/auth/calendar.readonly', 'profile', 'email'] }));
+app.get("//google", passport.authenticate('google', { scope: ['https://www.googleapis.com/auth/calendar.events', 'https://www.googleapis.com/auth/calendar.readonly', 'profile', 'email'] }));
 
-app.get('/google/callback', 
+app.get('//google/callback', 
   passport.authenticate('google', {  failureRedirect: '/failed' }),
   function(req, res) {
-    res.redirect('http://localhost:3000/Dashboard');
+    res.redirect('http://dolphinapp.me/college/Dashboard');
   });
