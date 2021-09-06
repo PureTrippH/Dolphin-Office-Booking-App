@@ -28,7 +28,7 @@ refreshDb.checkDates(twilioClient);
 mongo.init();
 //Middleware Initialization
 app.use( cors({
-    origin: ['http://96.30.199.111/college', 'http://dolphinapp.me/, http://localhost:3000/, http://localhost:3000/'],
+    origin: ['https://dolphinapp.me', 'https://96.30.199.111', 'http://localhost:3000'],
     credentials: true,
 }))
 
@@ -50,10 +50,6 @@ const isLoggedIn = (req, res, next) => {
         next();
     }
 }
-
-app.get("//googleindex.html", isLoggedIn, (req, res) => {
-    res.redirect()
-})
 
 //Initialization
 app.use(passport.initialize());
@@ -90,7 +86,7 @@ app.get('//appointments/:id/', isLoggedIn, async (req, res) => {
 
 app.get('//clear', isLoggedIn, (req, res) => {
     res.clearCookie(`collegeApp`);
-    return res.redirect("http://http://96.30.199.111/");
+    return res.redirect("http://localhost:3001//");
 });
 
 //Function to get A Calendar Using the Google Calendar API
@@ -113,13 +109,11 @@ app.post('//calendarInfo/writeReq/acceptReq', isLoggedIn, async (req, res) => {
     if(!postBody) return res.send({message: `The POST Request Body is Empty. Please fill it
     with Email, PhoneNumber, Date, Message, and Name`});
     let trueDate = parseISO(postBody.EndTime);
-    console.log(trueDate);
     await appointSchema.findOneAndUpdate({
         EndTime: trueDate
     }, {
         Status: "pending",
     }).then(results => {
-        console.log(results)
     });
 });
 
@@ -128,22 +122,19 @@ app.post('//calendarInfo/writeReq/editReq', isLoggedIn, async (req, res) => {
     if(!postBody) return res.send({message: `The POST Request Body is Empty. Please fill it
     with Email, PhoneNumber, Date, Message, and Name`});
     let endTime = addMinutes(parseISO(postBody.Date), parseInt(postBody.Duration)); 
-    console.log(parseISO(postBody.PrevDate));
-    console.log(postBody.PrevEndTime);
     await appointSchema.findOneAndUpdate({
         Date: postBody.PrevDate,
         EndTime: postBody.PrevEndTime
     }, {
         Email: postBody.Email,
         PhoneNumber: postBody.PhoneNumber,
-        Date: postBody.Date,
+        Date: parseISO(postBody.Date),
         Message: postBody.Message,
         Name: postBody.Name,
         Status: "pending",
         EndTime: endTime,
         HasNotified: false
     }).then(results => {
-        console.log(results)
     });
 });
 
@@ -154,7 +145,7 @@ app.post('//calendarInfo/writeReq', isLoggedIn, async (req, res) => {
     with Email, PhoneNumber, Date, Message, and Name`});
     console.log(postBody);
     let endTime = addMinutes(parseISO(postBody.Date), parseInt(postBody.Duration)); 
-    const oauth2Client = new google.auth.OAuth2()
+    const oauth2Client = new google.auth.OAuth2();
     oauth2Client.setCredentials({
         'access_token': req.user.accessToken,
     });
@@ -165,7 +156,7 @@ app.post('//calendarInfo/writeReq', isLoggedIn, async (req, res) => {
         _id: mongoose.Types.ObjectId(),
         Email: postBody.Email,
         PhoneNumber: postBody.PhoneNumber,
-        Date: postBody.Date,
+        Date: parseISO(postBody.Date),
         Message: postBody.Message,
         Name: postBody.Name,
         Status: "pending",
@@ -176,18 +167,17 @@ app.post('//calendarInfo/writeReq', isLoggedIn, async (req, res) => {
         if(results) {
             console.log(endTime.toISOString());
             console.log(parseISO(postBody.Date).toISOString());
-            calendar.events.inse
-            /*
-            calendar.events.insert({
-                calendarId: 'primary',
+            let cCCal = google.calendar({version: 'v3', auth: 'AIzaSyC9FpdXzJaQgt-Ldik-OKgZ6bZ-Dbn4ffQ'});
+            cCCal.events.insert({
+                calendarId: 'o9ne18kmfusmv3mkqftvg9pccs@group.calendar.google.com',
                 requestBody: {
                     description: `College Counseling: ${postBody.Message}`,
                 start: {
-                    dateTime: parseISO(postBody.Date).toISOString(),
+                    dateTime: addMinutes(parseISO(postBody.Date), 240).toISOString(),
                     timeZone: 'America/New_York',
                 },
                 end: {
-                    dateTime: endTime.toISOString(),
+                    dateTime: addMinutes(endTime, 240).toISOString(),
                     timeZone: 'America/New_York'
                 },
                 
@@ -200,7 +190,28 @@ app.post('//calendarInfo/writeReq', isLoggedIn, async (req, res) => {
                   },
                 }
             });
-            */
+            calendar.events.insert({
+                calendarId: 'primary',
+                requestBody: {
+                    description: `College Counseling: ${postBody.Message}`,
+                start: {
+                    dateTime: addMinutes(parseISO(postBody.Date), 240).toISOString(),
+                    timeZone: 'America/New_York',
+                },
+                end: {
+                    dateTime: addMinutes(endTime, 240).toISOString(),
+                    timeZone: 'America/New_York'
+                },
+                
+                'reminders': {
+                    'useDefault': false,
+                    'overrides': [
+                      {'method': 'email', 'minutes': 24 * 60},
+                      {'method': 'popup', 'minutes': 10}
+                    ]
+                  },
+                }
+            });
             twilioClient.messages.create({
                 body: `Hello ${postBody.Name}!
 You have successfully made an appointment with the CHC College Counseling Office on: 
@@ -216,24 +227,32 @@ To See Your Appointment Details, go to the website!`,
 
 app.get('//calendar/:id', isLoggedIn, (req, res) => {
     let id = req.params.id;
-    const oauth2Client = new google.auth.OAuth2()
-    console.log(req.user);
+    let postBody = req.body;
+    const oauth2Client = new google.auth.OAuth2({});
     console.log(`Access Token: ${req.user.accessToken}`);
     oauth2Client.setCredentials({
         'access_token': req.user.accessToken,
     });
     let calendar = google.calendar({version: 'v3', auth: oauth2Client});
+    let cCCal = google.calendar({version: 'v3', auth: 'AIzaSyC9FpdXzJaQgt-Ldik-OKgZ6bZ-Dbn4ffQ'});
     //Get Calendar
-    calendar.events.list({
+    let cal = calendar.events.list({
         calendarId: id,
-        timeMax: addDays(new Date(), 7).toISOString(), // Let's get events for one week
-        timeMin: addDays(new Date(), 0).toISOString(),
-        singleEvents: true,
-        orderBy: 'startTime',
-    }, (err, content) => {
+        timeMin: {
+            dateTime: new Date().toISOString(),
+            timeZone: 'America/New_York',
+        },
+        timeMax: {
+            dateTime: addDays(new Date(), 21).toISOString(),
+            timeZone: 'America/New_York'
+        }
+    },  (err, content) => {
         //PROBLEM: Calendar Not Found.
-        if(err) res.send({message: `${err}. Can not access ${req.params.id}'s Calendar`});
-        else res.send(content);
+        if(err) { res.send({message: `${err}. Can not access ${req.params.id}'s Calendar`}); console.log(err)}
+        else {
+            res.send(content);
+            console.log(content);
+        }
     })
 })
 
@@ -249,5 +268,5 @@ app.get("//google", passport.authenticate('google', { scope: ['https://www.googl
 app.get('//google/callback', 
   passport.authenticate('google', {  failureRedirect: '/failed' }),
   function(req, res) {
-    res.redirect('http://dolphinapp.me/college/Dashboard');
+    res.redirect('http://localhost:3000/');
   });

@@ -22,6 +22,50 @@ html {
   }
 }
 
+.custom-shape-divider-bottom-1628641643 {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+  transform: rotate(180deg);
+}
+
+.custom-shape-divider-bottom-1628641643 svg {
+  position: relative;
+  display: block;
+  width: calc(100% + 1.3px);
+  height: 75px;
+}
+
+.custom-shape-divider-bottom-1628641643 .shape-fill {
+  fill: #e37474;
+}
+
+
+
+
+.custom-shape-divider-bottom-rotate-1628641643 {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+}
+
+.custom-shape-divider-bottom-rotate-1628641643 svg {
+  position: relative;
+  display: block;
+  width: calc(162% + 1.3px);
+  height: 70px;
+  transform: rotateY(180deg);
+}
+
+.custom-shape-divider-bottom-rotate-1628641643 .shape-fill {
+  fill: #d9a1e6;
+}
+
 .App-header {
   background-color: #e3beba;
   min-height: 100vh;

@@ -6,7 +6,7 @@ const ProtectedRoute = (props) => {
   let history = useHistory();
     return (
       <Route render={() => {
-        return props.loggedIn ? props.children : window.location.href = 'http://localhost:3001/google'}}/>
+        return props.loggedIn ? props.children : window.location.assign('http://localhost:3001//google')}}/>
     );
   };
 export default ProtectedRoute;

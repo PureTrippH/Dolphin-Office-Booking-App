@@ -10,6 +10,7 @@ import BaseGrid from "../Components/Bases/BaseGrid";
 import Border from "../Components/Border";
 import styled from "styled-components";
 import Carousel from '../Components/LayoutComp/Carousel';
+import Wave from '../Components/aethetics/Wave';
 import Header from '../Components/LayoutComp/Headers/Header'
 import { getAccountInf, clearCookie, getCalendar, logout, getApps} from "../utils/axios";
 
@@ -73,6 +74,7 @@ function Dashboard() {
             <ScheduleForm style={{"padding": "2%", "margin": "5%", "position": "relative", "boxShadow": "rgba(0, 0, 0, 0.35) 0px 5px 15px"}} name={userInfo.name} email={userInfo.email}></ScheduleForm>
           </div>
           </div>
+
       <div style={{"boxShadow": "rgb(38, 57, 77) 0px 20px 30px 30px;", "position": "relative" ,"minHeight": "5vh", "maxHeight": "100%", "border": "inset #db7972", "backgroundColor": "#d47572"}}>
       </div>
       </Grid>

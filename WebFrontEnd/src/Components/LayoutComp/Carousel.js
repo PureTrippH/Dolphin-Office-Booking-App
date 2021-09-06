@@ -2,7 +2,7 @@ import React from 'react';
 import Border from "../Border";
 import '../../Mobile.css';
 import { Icon, Button } from '@material-ui/core';
-import { format, parseISO } from 'date-fns';
+import { format, parseISO, addHours } from 'date-fns';
 import Popup  from './Popup';
 import Carousel from 'react-bootstrap/Carousel' 
 
@@ -38,11 +38,16 @@ const BaseCarousel = (props) => {
 		<link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Fjalla+One&display=swap" rel="stylesheet" />
 		<h1 style={{"fontFamily": "Alfa Slab One","fontSize": "1.5em"}}>Appointment</h1>
 		<Border />
-		<h5 style={{"fontFamily": "Fjalla One", "fontSize": "1em"}}>{format(parseISO(newContent.Date), "MM-dd-yyyy 'At' hh:mma")}</h5>
+		<h5 style={{"fontFamily": "Fjalla One", "fontSize": "1em"}}>{format(addHours(parseISO(newContent.Date), 4), "MM-dd-yyyy 'At' hh:mma")}</h5>
 		<h4 style={{"fontFamily": "Fjalla One", "fontSize": "1em", "wordWrap": "inherit", "hyphens": "auto"}}>Message: {newContent.Message}</h4>
 		<h4 style={{"fontFamily": "Fjalla One", "fontSize": "1em"}}>Status: {newContent.Status}</h4>
-		{(newContent.Status == "modified") ? (() => setControlOp(false),
-		<Button onClick={() => toggleButton(format(parseISO(newContent.Date), "MM-dd-yyyy 'At' hh:mma"), newContent.Message, newContent.Date, newContent.EndTime)} style={{"marginBottom": "2.5%"}} color="error" variant="contained" type="submit">View Edits</Button>) : null
+		{
+		(newContent.Status == "modified") ? (() => setControlOp(false),
+		<Button onClick={() => {
+				let newDate = (addHours(parseISO(newContent.Date), 4));
+				console.log(newDate);
+			 toggleButton(format(newDate, "MM-dd-yyyy 'At' hh:mma"), newContent.Message, newContent.Date, newContent.EndTime);
+			}} style={{"marginBottom": "2.5%"}} color="error" variant="contained" type="submit">View Edits</Button>) : null
 		}
 	</div> 
 	</Carousel.Item>

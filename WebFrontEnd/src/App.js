@@ -1,7 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
 import Button from "./Components/Button" 
-import {Switch, Route} from 'react-router-dom';
+import {Switch, Route, Router} from 'react-router-dom';
 import Homepage from "./Routes/Home";
 import Dashboard from "./Routes/Dashboard";
 import ProtectedRoute from "./Routes/CustomRoutes/ProtectedRoute";
@@ -26,12 +26,11 @@ function App() {
   console.log(authorized);
   if(!loading) {
   return (
-    <Switch>
-    <Route path="/" exact={true} component={Homepage} />
-    <ProtectedRoute path="/Dashboard" loggedIn={authorized}>
-      <Dashboard />
-    </ProtectedRoute>
-  </Switch>
+      <Switch>
+        <ProtectedRoute path="/" loggedIn={authorized}>
+          <Dashboard />
+        </ProtectedRoute>
+      </Switch>
   );
   } else {
     return (
