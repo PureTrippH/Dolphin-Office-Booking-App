@@ -28,10 +28,10 @@ const ScheduleForm = (props) => {
                 getCalendar(email).then(calData => {
                     if(calData.data.data) {
                         calData.data.data.items.forEach(date => {
+                            
                             let startTime = parseISO(values.date) >= parseISO(date.start.dateTime) && parseISO(values.date) <= parseISO(date.end.dateTime);
                             let endTime = addMinutes(parseISO(values.date), parseInt(values.duration)) >= parseISO(date.start.dateTime) && addMinutes(parseISO(values.date), parseInt(values.duration)) <= parseISO(date.end.dateTime);
                             if(startTime) {
-                                console.log("Error");
                                 errors.date = "Start Date and Time Taken! Find Another Time, Day, or Duration!"
                             } else if(endTime) {
                                 errors.date = "End Time Taken! Find Another Time, Day, or Duration!"
@@ -39,22 +39,25 @@ const ScheduleForm = (props) => {
                             else if(parseISO(values.date) > addDays(new Date(), 21)) {
                                 errors.date = "Please Choose A Time Within 3 Weeks From Now!"
                             }
+                            console.log(`Error b4: ${errors.date}`);
                         });
+                        
                     }
+                }).then(() => {
+                    if(values.date === "") {
+                        errors.date = "Required Field!"
+                    }
+                    if(values.duration === "") {
+                        errors.duration = "Required Field!"
+                    }
+                    if(values.counselor === "") {
+                        errors.counselor = "Required Field!"
+                    }
+                    return errors;
                 });
-                if(values.date === "") {
-                    errors.date = "Required Field!"
-                }
-                if(values.duration === "") {
-                    errors.duration = "Required Field!"
-                }
-                if(values.counselor === "") {
-                    errors.counselor = "Required Field!"
-                }
-                console.log(errors.startTime);
-                return errors;
             }}>
                 {({ values, errors, isSubmitting, handleChange, handleBlur, handleSubmit }) => (
+                    
                     <Form style={{"backgroundColor": "#f2c1bd","padding": `"2%"`, "margin": "5%", "border": "groove #e6b7b3 3px"}}>
                     <link href="https://fonts.googleapis.com/css2?family=Fjalla+One&display=swap" rel="stylesheet" />
                     <h3 style={{"fontFamily": "Fjalla One"}}>Appointment Date</h3>
