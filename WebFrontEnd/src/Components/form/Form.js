@@ -8,42 +8,54 @@ import { parseISO, addMinutes, addDays } from "date-fns"
 const ScheduleForm = (props) => {
     return (
         <div>
-            <Formik initialValues={{date: "", phoneNum: "", counselor: "", duration: "", message: ""}} onSubmit={(data, {setSubmitting, resetForm}) => {
-                if(props.type == "edited") {
-                    setSubmitting(true);
-                    overwriteDB(props.email, data.phoneNum, data.date, data.message, props.name, data.duration, props.prevDate, props.prevEndTime);
-                    props.changeFunc("", "", "");
-                    window.location.reload();
-                }
-                setTimeout(() => {
-                    let vals = JSON.stringify(data, null, 2);
-                    writeToDB(props.email, data.phoneNum, data.date, data.message, props.name, data.duration);
-                    setSubmitting(false);
-                    return window.location.reload();
-                }, 400);
-            }}
-            validate={(values, props) => {
-                let errors = {}
-                let email = `${values.counselor}@gmail.com`;
-                getCalendar(email).then(calData => {
+            <Formik initialValues={{date: "", phoneNum: "", counselor: "", duration: "", message: ""}} onSubmit={(data, {setSubmitting, resetForm, setErrors}) => {
+                let email = `${data.counselor}@gmail.com`;
+                let calendar = {};
+                let errors = false;
+                getCalendar(email).then(async calData => {
                     if(calData.data.data) {
-                        calData.data.data.items.forEach(date => {
-                            
-                            let startTime = parseISO(values.date) >= parseISO(date.start.dateTime) && parseISO(values.date) <= parseISO(date.end.dateTime);
-                            let endTime = addMinutes(parseISO(values.date), parseInt(values.duration)) >= parseISO(date.start.dateTime) && addMinutes(parseISO(values.date), parseInt(values.duration)) <= parseISO(date.end.dateTime);
+                        calendar = calData.data.data.items;
+                        console.log(calendar);
+                        calendar.forEach(date => {
+                            let startTime = parseISO(data.date) >= parseISO(date.start.dateTime) && parseISO(data.date) <= parseISO(date.end.dateTime);
+                            let endTime = addMinutes(parseISO(data.date), parseInt(data.duration)) >= parseISO(date.start.dateTime) && addMinutes(parseISO(data.date), parseInt(data.duration)) <= parseISO(date.end.dateTime);
                             if(startTime) {
-                                errors.date = "Start Date and Time Taken! Find Another Time, Day, or Duration!"
+                                setErrors({date: "Start Date and Time Taken! Find Another Time, Day, or Duration!"})
+                                errors = true;
                             } else if(endTime) {
-                                errors.date = "End Time Taken! Find Another Time, Day, or Duration!"
+                                setErrors({date: "End Time Taken! Find Another Time, Day, or Duration!"})
+                                errors = true;
                             }
-                            else if(parseISO(values.date) > addDays(new Date(), 21)) {
-                                errors.date = "Please Choose A Time Within 3 Weeks From Now!"
+                            else if(parseISO(data.date) > addDays(new Date(), 21)) {
+                                setErrors({date: "Please Choose A Time Within 3 Weeks From Now!"})
+                                errors = true;
                             }
-                            console.log(`Error b4: ${errors.date}`);
+                            
                         });
-                        
+                        if(errors) {
+                            setSubmitting(false);
+                        } else {
+                        if(props.type == "edited") {
+                            setSubmitting(true);
+                            overwriteDB(props.email, data.phoneNum, data.date, data.message, props.name, data.duration, props.prevDate, props.prevEndTime);
+                            props.changeFunc("", "", "");
+                            window.location.reload();
+                        }
+                        setTimeout(() => {
+                            let vals = JSON.stringify(data, null, 2);
+                            writeToDB(props.email, data.phoneNum, data.date, data.message, props.name, data.duration);
+                            setSubmitting(false);
+                            return window.location.reload();
+                        }, 400);
                     }
-                }).then(() => {
+                }
+                })
+                console.log(calendar);
+
+            }}
+            validate={async (values, props) => {
+                let errors = {};
+                let email = `${values.counselor}@gmail.com`;
                     if(values.date === "") {
                         errors.date = "Required Field!"
                     }
@@ -53,8 +65,8 @@ const ScheduleForm = (props) => {
                     if(values.counselor === "") {
                         errors.counselor = "Required Field!"
                     }
+                    console.log(errors);
                     return errors;
-                });
             }}>
                 {({ values, errors, isSubmitting, handleChange, handleBlur, handleSubmit }) => (
                     
@@ -88,8 +100,7 @@ const ScheduleForm = (props) => {
                     </Button>
                     </Form>
                 )}
-        </Formik><div>
-        </div>
+        </Formik>
         </div>
     )
 }
