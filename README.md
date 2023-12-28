@@ -1,6 +1,6 @@
 # CHC College Counseling Office Web App
 ## Context
-Originally, this was commissioned by the CHC College Counseling Office to better the workflow of their office and appointment scheduling. For Intro to Engineering, me and @Krevice decided to pick up this project and spend a year on it.
+Originally, this was commissioned by the CHC College Counseling Office to better the workflow of their office and appointment scheduling. For Intro to Engineering, me and [Grayson](https://github.com/Krevace/chc-counseling-scheduler) decided to pick up this project and spend a year on it.
 ## Functionaily
 # Counselor's side (Native Application)
 They are given a C# frontend that runs natively on their PC. Through it, they can check appointment requests and accept appointments. This will in turn add the appointment to their google calendar. From here, each counselor can reject, accept, or request an edit to every appointment and the students can see which is requested to allow for conversation between student and counselors.
